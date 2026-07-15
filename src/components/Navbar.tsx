@@ -61,6 +61,16 @@ const Navbar: React.FC = () => {
               Projects
             </Link>
           </li>
+          <li>
+            <Link href="/about" className={navLinkClass(isActive("/about"))}>
+              About
+            </Link>
+          </li>
+          <li>
+            <Link href="/contact" className={navLinkClass(isActive("/contact"))}>
+              Contact
+            </Link>
+          </li>
 
           {isAuthenticated && (
             <>
@@ -161,6 +171,16 @@ const Navbar: React.FC = () => {
           <li>
             <Link href="/projects" className="font-medium text-theme">
               Projects
+            </Link>
+          </li>
+          <li>
+            <Link href="/about" className="font-medium text-theme">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link href="/contact" className="font-medium text-theme">
+              Contact
             </Link>
           </li>
           {isAuthenticated && (
