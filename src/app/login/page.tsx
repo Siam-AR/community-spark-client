@@ -17,6 +17,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { sanitizeRedirectPath } from '@/lib/auth-redirect';
 
+declare global {
+  interface Window {
+    google?: {
+      accounts?: {
+        id?: {
+          initialize: (config: Record<string, unknown>) => void;
+          prompt: (callback?: (notification: { isNotDisplayed?: () => boolean; isSkippedMoment?: () => boolean }) => void) => void;
+          renderButton: (container: HTMLElement, options: Record<string, string>) => void;
+        };
+      };
+    };
+  }
+}
+
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -90,7 +104,12 @@ function LoginPageContent() {
 
     try {
       setGoogleError('');
-      window.google.accounts.id.prompt((notification) => {
+      const googleId = window.google?.accounts?.id;
+      if (!googleId?.prompt) {
+        setGoogleError('Google sign-in is not available right now. Please refresh and try again.');
+        return;
+      }
+      googleId.prompt((notification) => {
         if (notification?.isNotDisplayed?.() || notification?.isSkippedMoment?.()) {
           setGoogleError('Google sign-in prompt was not displayed. Please try again in a moment.');
         }
@@ -108,9 +127,11 @@ function LoginPageContent() {
 
     const initializeGoogle = () => {
       try {
-        if (window.google?.accounts) {
+        const googleAccounts = window.google?.accounts;
+        const googleId = googleAccounts?.id;
+        if (googleAccounts && googleId) {
           setGoogleError('');
-          window.google.accounts.id.initialize({
+          googleId.initialize({
             client_id: googleClientId,
             callback: handleGoogleResponse,
             ux_mode: 'popup',
@@ -120,7 +141,7 @@ function LoginPageContent() {
           try {
             const container = googleButtonRef.current;
             if (container) {
-              window.google.accounts.id.renderButton(container, {
+              googleId.renderButton(container, {
                 type: 'standard',
                 theme: 'outline',
                 size: 'large',
