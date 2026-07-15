@@ -11,7 +11,7 @@ export default function NotFound() {
           The idea you opened may have been removed or the link is invalid.
         </p>
         <div className="mt-6 flex justify-center">
-          <Link href="/ideas">
+          <Link href="/projects">
             <Button variant="primary">Back to Ideas</Button>
           </Link>
         </div>

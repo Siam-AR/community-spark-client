@@ -50,7 +50,7 @@ export default function IdeaDetailsPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.replace(buildLoginRedirectUrl(pathname || `/ideas/${ideaId}`));
+      router.replace(buildLoginRedirectUrl(pathname || `/projects/${ideaId}`));
     }
   }, [authLoading, isAuthenticated, router, pathname, ideaId]);
 
@@ -134,7 +134,7 @@ export default function IdeaDetailsPage() {
           <h1 className="mt-3 text-3xl font-black text-slate-900">Could not load idea details</h1>
           <p className="mt-3 text-sm leading-7 text-slate-600">{error}</p>
           <div className="mt-6 flex gap-3">
-            <Link href="/ideas">
+            <Link href="/projects">
               <Button variant="primary">Back to Ideas</Button>
             </Link>
           </div>
@@ -163,7 +163,7 @@ export default function IdeaDetailsPage() {
   return (
     <div className="px-4 py-6 md:py-10 text-slate-900">
       <div className="mx-auto max-w-7xl">
-        <Link href="/ideas" className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-900">
+        <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-900">
           <FaArrowLeft />
           Back to Ideas
         </Link>

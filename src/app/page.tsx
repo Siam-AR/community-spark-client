@@ -197,7 +197,7 @@ export default function Home() {
                     </p>
 
                     <div className="flex gap-4">
-                      <Link href="/ideas">
+                      <Link href="/projects">
                         <Button variant="primary">Explore Community Projects</Button>
                       </Link>
                     </div>
@@ -216,7 +216,7 @@ export default function Home() {
               <p className="text-sm font-semibold tracking-[0.25em] uppercase text-emerald-600">Featured Projects</p>
               <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">Highlighted community initiatives with real momentum</h2>
             </div>
-            <Link href="/ideas" className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800">
+            <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800">
               Browse all projects
               <FaArrowRight className="text-xs" />
             </Link>
@@ -256,7 +256,7 @@ export default function Home() {
                     </div>
                     <h3 className="mt-3 text-xl font-bold text-theme line-clamp-2">{idea.title || 'Community project'}</h3>
                     <p className="mt-3 text-sm text-theme-muted line-clamp-3">{idea.shortDescription || 'A local initiative looking for support and collaboration.'}</p>
-                    <Link href={`/ideas/${idea._id}`} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800">
+                    <Link href={`/projects/${idea._id}`} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800">
                       Read project details
                       <FaArrowRight className="text-xs" />
                     </Link>

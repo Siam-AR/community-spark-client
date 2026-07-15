@@ -104,7 +104,7 @@ export default function IdeaPage() {
   };
 
   const openIdeaDetails = (ideaId?: string) => {
-    if (ideaId) router.push(`/ideas/${ideaId}`);
+    if (ideaId) router.push(`/projects/${ideaId}`);
   };
 
   const handleCardKeyDown = (event: React.KeyboardEvent<HTMLElement>, ideaId?: string) => {
@@ -221,7 +221,7 @@ export default function IdeaPage() {
           </div>
         ) : error ? (
           <div className="rounded-[2rem] border border-rose-200 bg-rose-50 p-6 text-rose-900 shadow-sm">
-            <p className="text-lg font-semibold">Unable to load ideas</p>
+            <p className="text-lg font-semibold">Unable to load projects</p>
             <p className="mt-2 text-sm text-rose-700">{error}</p>
           </div>
         ) : ideas.length === 0 ? (
