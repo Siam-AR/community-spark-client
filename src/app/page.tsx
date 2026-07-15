@@ -254,7 +254,7 @@ export default function Home() {
                       </span>
                     </div>
                     <h3 className="mt-3 text-xl font-bold text-theme line-clamp-2">{idea.title || 'Community project'}</h3>
-                    <p className="mt-3 text-sm text-theme-muted line-clamp-3">{idea.shortDescription || 'A local initiative looking for support and collaboration.'}</p>
+                    <p className="mt-3 text-sm text-theme-muted line-clamp-1">{idea.shortDescription || 'A local initiative looking for support and collaboration.'}</p>
                     <Link href={`/projects/${idea._id}`} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[var(--brand-emerald)] hover:text-[var(--brand-gold)]">
                       Read project details
                       <FaArrowRight className="text-xs" />
@@ -276,7 +276,21 @@ export default function Home() {
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" />
                   <XAxis dataKey="name" tickLine={false} axisLine={false} />
                   <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
-                  <Tooltip />
+                  <Tooltip
+                    cursor={{ fill: 'rgba(16, 185, 129, 0.12)' }}
+                    contentStyle={{
+                      borderRadius: 12,
+                      border: '1px solid rgba(148, 163, 184, 0.25)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.97)',
+                      boxShadow: '0 14px 32px rgba(15, 23, 42, 0.14)',
+                    }}
+                    labelStyle={{ color: '#0f172a', fontWeight: 700 }}
+                    itemStyle={{ color: '#0f172a', fontWeight: 600 }}
+                    formatter={(value) => {
+                      const safeValue = typeof value === 'number' ? value : Number(value ?? 0);
+                      return [`${safeValue} project${safeValue === 1 ? '' : 's'}`, 'Projects'];
+                    }}
+                  />
                   <Bar dataKey="count" fill="url(#featuredBarGradient)" radius={[8, 8, 0, 0]} />
                   <defs>
                     <linearGradient id="featuredBarGradient" x1="0" y1="0" x2="0" y2="1">
@@ -290,11 +304,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="max-w-7xl mx-auto overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[linear-gradient(135deg,var(--surface-bg),rgba(47,125,75,0.08))] p-4 shadow-[var(--shadow-soft)] sm:p-6 md:p-8">
-          <div className="rounded-[1.25rem] border border-white/30 bg-white/70 p-3 shadow-inner backdrop-blur-sm dark:bg-slate-900/50">
+        <section className="max-w-7xl mx-auto overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[linear-gradient(135deg,rgba(255,255,255,0.98),rgba(236,253,245,0.95),rgba(254,249,195,0.95))] p-4 shadow-[var(--shadow-soft)] sm:p-6 md:p-8 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(3,19,25,0.96),rgba(30,41,59,0.95))] dark:border-emerald-400/20">
+          <div className="relative overflow-hidden rounded-[1.5rem] border border-emerald-200/70 bg-white/80 p-3 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-sm dark:border-emerald-400/20 dark:bg-slate-900/80 dark:shadow-[0_20px_60px_rgba(2,6,23,0.5)]">
+            <div className="absolute inset-y-0 left-0 w-24 bg-[linear-gradient(90deg,rgba(16,185,129,0.16),transparent)] dark:bg-[linear-gradient(90deg,rgba(16,185,129,0.28),transparent)]" />
+            <div className="absolute inset-y-0 right-0 w-24 bg-[linear-gradient(270deg,rgba(234,179,8,0.16),transparent)] dark:bg-[linear-gradient(270deg,rgba(250,204,21,0.22),transparent)]" />
             <Marquee
               direction="left"
-              speed={38}
+              speed={36}
               pauseOnHover
               pauseOnClick
               gradient={false}
@@ -303,10 +319,10 @@ export default function Home() {
               {[...marqueeItems, ...marqueeItems].map((item, index) => (
                 <span
                   key={`${item.label}-${index}`}
-                  className={`mx-2 inline-flex items-center rounded-full border px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] shadow-sm ${
+                  className={`mx-2 inline-flex items-center rounded-full border px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] shadow-sm transition hover:scale-[1.02] ${
                     item.tone === 'gold'
-                      ? 'border-[var(--brand-gold)]/25 bg-[var(--brand-gold)]/10 text-[var(--brand-gold)]'
-                      : 'border-[var(--brand-emerald)]/25 bg-[var(--brand-emerald)]/10 text-[var(--brand-emerald)]'
+                      ? 'border-[var(--brand-gold)]/30 bg-[var(--brand-gold)]/10 text-[var(--brand-gold)] dark:border-[var(--brand-gold)]/40 dark:bg-[var(--brand-gold)]/15 dark:text-amber-300'
+                      : 'border-[var(--brand-emerald)]/30 bg-[var(--brand-emerald)]/10 text-[var(--brand-emerald)] dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300'
                   }`}
                 >
                   {item.label}
@@ -316,18 +332,22 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="max-w-7xl mx-auto rounded-[2rem] border border-[var(--surface-border)] bg-[linear-gradient(135deg,var(--brand-emerald),var(--brand-gold))] p-8 text-white shadow-[var(--shadow-soft)] md:p-10">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
+        <section className="max-w-7xl mx-auto overflow-hidden rounded-[2rem] border border-white/20 bg-[linear-gradient(135deg,var(--brand-emerald),var(--brand-gold))] p-8 text-white shadow-[0_25px_70px_rgba(15,23,42,0.18)] md:p-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.22),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.16),transparent_30%)]" />
+          <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
               <p className="text-sm font-semibold tracking-[0.25em] uppercase text-white/80">Ready to begin</p>
-              <h2 className="mt-2 text-2xl md:text-4xl font-bold">Bring a community idea forward and find people who care.</h2>
+              <h2 className="mt-2 text-2xl md:text-4xl font-bold leading-tight">Bring a community idea forward and find people who care.</h2>
+              <p className="mt-4 text-sm leading-7 text-white/85 md:text-base">
+                Turn a simple spark into a visible project with support, feedback, and momentum from the community.
+              </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link href="/add-project">
-                <Button className="theme-btn-secondary bg-white/95 text-slate-900 hover:bg-white">Start a Project</Button>
+                <Button className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:-translate-y-0.5 hover:bg-slate-100">Start a Project</Button>
               </Link>
               <Link href="/projects">
-                <Button className="theme-btn-secondary border-white/40 bg-transparent text-white hover:bg-white/10">Browse Projects</Button>
+                <Button className="rounded-2xl border border-white/40 bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">Browse Projects</Button>
               </Link>
             </div>
           </div>

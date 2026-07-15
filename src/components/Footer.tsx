@@ -80,7 +80,6 @@ const Footer: React.FC = () => {
           <div className="flex items-center gap-6">
             <Link href="/about" className="transition hover:text-amber-300">About</Link>
             <Link href="/contact" className="transition hover:text-amber-300">Contact</Link>
-            <Link href="/resources" className="transition hover:text-amber-300">Resources</Link>
           </div>
         </div>
       </div>

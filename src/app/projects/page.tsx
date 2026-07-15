@@ -1,31 +1,15 @@
 "use client";
 
 import Loader from '@/components/Loader';
+import ProjectCard from '@/components/ProjectCard';
 import { ideasAPI } from '@/lib/api';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaCalendarAlt, FaFilter, FaSearch, FaUser } from 'react-icons/fa';
+import { FaFilter, FaSearch } from 'react-icons/fa';
 import type { Idea } from '@/types';
 
 const CATEGORY_OPTIONS = ['All Categories', 'Education', 'Environment', 'Health', 'Community Welfare', 'Technology', 'Culture'];
-
-const formatDate = (value?: string) => {
-  if (!value) return 'Recently';
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Recently';
-
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-};
-
-const formatSupportNeeded = (idea: Idea) => {
-  return idea.supportNeeded || idea.estimatedBudget || 'Support details not shared';
-};
 
 export default function IdeaPage() {
   const router = useRouter();
@@ -95,48 +79,6 @@ export default function IdeaPage() {
     };
   }, [debouncedSearch, category, dateFrom, dateTo]);
 
-  const fallbackProjects: Idea[] = [
-    {
-      _id: '689b5a2d8f1c4d0b1a2e3f41',
-      title: 'Neighborhood Food Garden',
-      shortDescription: 'A shared garden that grows fresh produce for local families.',
-      category: 'Environment',
-      imageURL: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80',
-      location: 'Dhaka North',
-      supportNeeded: 'Volunteers and basic gardening tools',
-      estimatedBudget: '$1200',
-      userName: 'Aisha Rahman',
-      createdAt: '2026-01-12T10:00:00.000Z',
-      commentCount: 6,
-    },
-    {
-      _id: '689b5a2d8f1c4d0b1a2e3f43',
-      title: 'Youth Coding Workshop',
-      shortDescription: 'Weekly sessions that help local teens learn practical coding skills.',
-      category: 'Education',
-      imageURL: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
-      location: 'Uttara',
-      supportNeeded: 'Mentors and laptops',
-      estimatedBudget: '$1800',
-      userName: 'Nabil Hasan',
-      createdAt: '2026-02-03T14:30:00.000Z',
-      commentCount: 4,
-    },
-    {
-      _id: '689b5a2d8f1c4d0b1a2e3f45',
-      title: 'Community Health Checkpoint',
-      shortDescription: 'A pop-up health awareness event for families in underserved areas.',
-      category: 'Health',
-      imageURL: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
-      location: 'Banani',
-      supportNeeded: 'Health volunteers and screening materials',
-      estimatedBudget: '$2200',
-      userName: 'Mina Akter',
-      createdAt: '2026-03-18T09:15:00.000Z',
-      commentCount: 8,
-    },
-  ];
-
   const resetFilters = () => {
     setSearchValue('');
     setDebouncedSearch('');
@@ -147,13 +89,6 @@ export default function IdeaPage() {
 
   const openIdeaDetails = (ideaId?: string) => {
     if (ideaId) router.push(`/projects/${ideaId}`);
-  };
-
-  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLElement>, ideaId?: string) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      openIdeaDetails(ideaId);
-    }
   };
 
   return (
@@ -258,8 +193,20 @@ export default function IdeaPage() {
 
       <section className="mt-8">
         {loading ? (
-          <div className="theme-section h-[55vh]">
-            <Loader message="Loading community projects..." />
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[var(--surface-border)] bg-[var(--surface-bg)] shadow-sm">
+                <div className="h-56 animate-pulse bg-slate-200" />
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="h-4 w-24 animate-pulse rounded-full bg-slate-200" />
+                  <div className="mt-4 h-6 w-3/4 animate-pulse rounded-full bg-slate-200" />
+                  <div className="mt-3 h-4 w-full animate-pulse rounded-full bg-slate-200" />
+                  <div className="mt-2 h-4 w-5/6 animate-pulse rounded-full bg-slate-200" />
+                  <div className="mt-4 h-24 rounded-2xl bg-slate-100" />
+                  <div className="mt-5 h-12 rounded-2xl bg-slate-200" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : error ? (
           <div className="theme-card-soft rounded-[2rem] p-6 text-rose-900">
@@ -277,64 +224,9 @@ export default function IdeaPage() {
             </div>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {ideas.map((idea) => (
-              <article
-                key={idea._id}
-                role="button"
-                tabIndex={0}
-                onClick={() => openIdeaDetails(idea._id)}
-                onKeyDown={(event) => handleCardKeyDown(event, idea._id)}
-                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-bg)] shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[var(--brand-emerald)] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-emerald)]/30"
-              >
-                <div className="relative h-56 overflow-hidden bg-slate-100">
-                  <div
-                    className="h-full w-full bg-cover bg-center transition duration-500 group-hover:scale-105"
-                    style={{
-                      backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.08), rgba(15,23,42,0.12)), url(${idea.imageURL || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop'})`,
-                    }}
-                  />
-                  <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[var(--brand-emerald)] shadow-sm backdrop-blur-sm">
-                    {idea.category || 'Uncategorized'}
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-col p-5 text-slate-900">
-                  <div className="flex items-center justify-between gap-3 text-xs text-slate-500">
-                    <span>{formatDate(idea.createdAt)}</span>
-                    <span>{idea.commentCount ?? 0} comments</span>
-                  </div>
-
-                  <h2 className="mt-3 min-h-16 text-2xl font-bold tracking-tight text-slate-900">
-                    {idea.title || 'Untitled project'}
-                  </h2>
-
-                  <p className="mt-3 min-h-20 text-sm leading-7 text-slate-600">
-                    {idea.shortDescription || 'No short description was provided for this project.'}
-                  </p>
-
-                  <div className="mt-4 grid gap-3 text-sm text-slate-700">
-                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--brand-emerald)]">Support Needed</p>
-                      <p className="mt-1 text-sm text-slate-700">{formatSupportNeeded(idea)}</p>
-                    </div>
-                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaUser className="text-[var(--brand-emerald)]" />
-                      <span>{idea.userName || idea.userEmail || 'Anonymous builder'}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto pt-5">
-                    <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
-                      <span className="inline-flex items-center gap-2">
-                        <FaCalendarAlt className="text-[var(--brand-emerald)]" />
-                        {formatDate(idea.createdAt)}
-                      </span>
-                      <span className="font-semibold text-[var(--brand-emerald)]">Open details →</span>
-                    </div>
-                  </div>
-                </div>
-              </article>
+              <ProjectCard key={idea._id} idea={idea} onViewDetails={openIdeaDetails} />
             ))}
           </div>
         )}
