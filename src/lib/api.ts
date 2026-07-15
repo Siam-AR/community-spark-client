@@ -11,6 +11,104 @@ export interface IdeaFilters {
   dateTo?: string;
 }
 
+const fallbackProjects: Idea[] = [
+  {
+    _id: '689b5a2d8f1c4d0b1a2e3f41',
+    title: 'Neighborhood Food Garden',
+    shortDescription: 'A shared garden that grows fresh produce for local families.',
+    detailedDescription: 'A shared garden that grows fresh produce for local families and creates a volunteer-friendly learning space.',
+    fullDescription: 'A shared garden that grows fresh produce for local families and creates a volunteer-friendly learning space.',
+    category: 'Environment',
+    tags: ['gardening', 'food', 'community'],
+    imageURL: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80',
+    location: 'Dhaka North',
+    supportNeeded: 'Volunteers and basic gardening tools',
+    priority: 'High',
+    estimatedBudget: '$1200',
+    targetAudience: 'Local families and school groups',
+    problemStatement: 'Fresh produce access is limited for many nearby homes.',
+    proposedSolution: 'Convert a small community lot into a productive shared garden.',
+    userName: 'Aisha Rahman',
+    userEmail: 'aisha@example.com',
+    createdAt: '2026-01-12T10:00:00.000Z',
+    updatedAt: '2026-01-12T10:00:00.000Z',
+    likes: 24,
+    commentCount: 6,
+  },
+  {
+    _id: '689b5a2d8f1c4d0b1a2e3f43',
+    title: 'Youth Coding Workshop',
+    shortDescription: 'Weekly sessions that help local teens learn practical coding skills.',
+    detailedDescription: 'Weekly sessions that help local teens learn practical coding skills and build confidence through real projects.',
+    fullDescription: 'Weekly sessions that help local teens learn practical coding skills and build confidence through real projects.',
+    category: 'Education',
+    tags: ['education', 'technology', 'youth'],
+    imageURL: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+    location: 'Uttara',
+    supportNeeded: 'Mentors and laptops',
+    priority: 'Medium',
+    estimatedBudget: '$1800',
+    targetAudience: 'Teen learners',
+    problemStatement: 'Many young people lack access to structured digital learning.',
+    proposedSolution: 'Launch a low-cost workshop series with community mentors.',
+    userName: 'Nabil Hasan',
+    userEmail: 'nabil@example.com',
+    createdAt: '2026-02-03T14:30:00.000Z',
+    updatedAt: '2026-02-03T14:30:00.000Z',
+    likes: 17,
+    commentCount: 4,
+  },
+  {
+    _id: '689b5a2d8f1c4d0b1a2e3f45',
+    title: 'Community Health Checkpoint',
+    shortDescription: 'A pop-up health awareness event for families in underserved areas.',
+    detailedDescription: 'A pop-up health awareness event for families in underserved areas with free screenings and guidance.',
+    fullDescription: 'A pop-up health awareness event for families in underserved areas with free screenings and guidance.',
+    category: 'Health',
+    tags: ['health', 'wellness', 'outreach'],
+    imageURL: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
+    location: 'Banani',
+    supportNeeded: 'Health volunteers and screening materials',
+    priority: 'High',
+    estimatedBudget: '$2200',
+    targetAudience: 'Families and older adults',
+    problemStatement: 'Local residents need easier access to preventive health support.',
+    proposedSolution: 'Create a mobile-style health checkpoint with local partners.',
+    userName: 'Mina Akter',
+    userEmail: 'mina@example.com',
+    createdAt: '2026-03-18T09:15:00.000Z',
+    updatedAt: '2026-03-18T09:15:00.000Z',
+    likes: 31,
+    commentCount: 8,
+  },
+];
+
+const getFallbackProjects = (filters: IdeaFilters = {}): Idea[] => {
+  let projects = [...fallbackProjects];
+
+  if (filters.category && filters.category !== 'All Categories') {
+    projects = projects.filter((project) => project.category === filters.category);
+  }
+
+  if (filters.search) {
+    const query = filters.search.toLowerCase();
+    projects = projects.filter((project) => `${project.title} ${project.shortDescription}`.toLowerCase().includes(query));
+  }
+
+  if (filters.dateFrom) {
+    const from = new Date(filters.dateFrom);
+    projects = projects.filter((project) => project.createdAt && new Date(project.createdAt) >= from);
+  }
+
+  if (filters.dateTo) {
+    const to = new Date(filters.dateTo);
+    to.setHours(23, 59, 59, 999);
+    projects = projects.filter((project) => project.createdAt && new Date(project.createdAt) <= to);
+  }
+
+  return projects;
+};
+
 const getApiBaseUrl = (): string => {
   if (typeof window !== 'undefined') {
     const { hostname } = window.location;
@@ -92,18 +190,50 @@ export const authAPI = {
 };
 
 export const ideasAPI = {
-  getFeatured: () => apiCall<Idea[]>('/projects/featured'),
+  getFeatured: async () => {
+    try {
+      const data = await apiCall<Idea[]>('/projects/featured');
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+      return getFallbackProjects().slice(0, 3);
+    } catch (error) {
+      console.warn('Falling back to local project data for featured projects:', error);
+      return getFallbackProjects().slice(0, 3);
+    }
+  },
 
-  getAll: (filters: IdeaFilters = {}) => {
+  getAll: async (filters: IdeaFilters = {}) => {
     const params = new URLSearchParams();
     if (filters.category) params.append('category', filters.category);
     if (filters.search) params.append('search', filters.search);
     if (filters.dateFrom) params.append('dateFrom', filters.dateFrom);
     if (filters.dateTo) params.append('dateTo', filters.dateTo);
-    return apiCall<Idea[]>(`/projects?${params.toString()}`);
+
+    try {
+      const data = await apiCall<Idea[]>(`/projects?${params.toString()}`);
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+      return getFallbackProjects(filters);
+    } catch (error) {
+      console.warn('Falling back to local project data for project list:', error);
+      return getFallbackProjects(filters);
+    }
   },
 
-  getById: (id: string) => apiCall<Idea>(`/projects/${id}`),
+  getById: async (id: string) => {
+    try {
+      const data = await apiCall<Idea>(`/projects/${id}`);
+      if (data && (data._id || data.id)) {
+        return data;
+      }
+      return getFallbackProjects().find((project) => project._id === id) ?? null;
+    } catch (error) {
+      console.warn('Falling back to local project data for project details:', error);
+      return getFallbackProjects().find((project) => project._id === id) ?? null;
+    }
+  },
 
   create: (data: Partial<Idea>) => apiCall<Idea>('/projects', {
     method: 'POST',

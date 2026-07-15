@@ -50,6 +50,48 @@ export default function Home() {
   const [ideasLoading, setIdeasLoading] = useState(true);
   const [ideasError, setIdeasError] = useState('');
 
+  const fallbackFeaturedIdeas: Idea[] = [
+    {
+      _id: '689b5a2d8f1c4d0b1a2e3f41',
+      title: 'Neighborhood Food Garden',
+      shortDescription: 'A shared garden that grows fresh produce for local families.',
+      category: 'Environment',
+      imageURL: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80',
+      location: 'Dhaka North',
+      supportNeeded: 'Volunteers and basic gardening tools',
+      estimatedBudget: '$1200',
+      userName: 'Aisha Rahman',
+      createdAt: '2026-01-12T10:00:00.000Z',
+      commentCount: 6,
+    },
+    {
+      _id: '689b5a2d8f1c4d0b1a2e3f43',
+      title: 'Youth Coding Workshop',
+      shortDescription: 'Weekly sessions that help local teens learn practical coding skills.',
+      category: 'Education',
+      imageURL: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+      location: 'Uttara',
+      supportNeeded: 'Mentors and laptops',
+      estimatedBudget: '$1800',
+      userName: 'Nabil Hasan',
+      createdAt: '2026-02-03T14:30:00.000Z',
+      commentCount: 4,
+    },
+    {
+      _id: '689b5a2d8f1c4d0b1a2e3f45',
+      title: 'Community Health Checkpoint',
+      shortDescription: 'A pop-up health awareness event for families in underserved areas.',
+      category: 'Health',
+      imageURL: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
+      location: 'Banani',
+      supportNeeded: 'Health volunteers and screening materials',
+      estimatedBudget: '$2200',
+      userName: 'Mina Akter',
+      createdAt: '2026-03-18T09:15:00.000Z',
+      commentCount: 8,
+    },
+  ];
+
   const impactStats = useMemo(() => {
     const totalProjects = featuredIdeas.length;
     const categories = new Set(
@@ -131,13 +173,14 @@ export default function Home() {
         const data = await ideasAPI.getFeatured();
 
         if (mounted) {
-          setFeaturedIdeas(Array.isArray(data) ? data : []);
+          const resolvedIdeas = Array.isArray(data) && data.length > 0 ? data : fallbackFeaturedIdeas;
+          setFeaturedIdeas(resolvedIdeas);
           setIdeasError('');
         }
       } catch (error) {
         if (mounted) {
           setIdeasError(error instanceof Error ? error.message : 'Failed to load trending initiatives.');
-          setFeaturedIdeas([]);
+          setFeaturedIdeas(fallbackFeaturedIdeas);
         }
       } finally {
         if (mounted) {
