@@ -92,7 +92,7 @@ export const authAPI = {
 };
 
 export const ideasAPI = {
-  getFeatured: () => apiCall<Idea[]>('/ideas/featured'),
+  getFeatured: () => apiCall<Idea[]>('/projects/featured'),
 
   getAll: (filters: IdeaFilters = {}) => {
     const params = new URLSearchParams();
@@ -100,26 +100,26 @@ export const ideasAPI = {
     if (filters.search) params.append('search', filters.search);
     if (filters.dateFrom) params.append('dateFrom', filters.dateFrom);
     if (filters.dateTo) params.append('dateTo', filters.dateTo);
-    return apiCall<Idea[]>(`/ideas?${params.toString()}`);
+    return apiCall<Idea[]>(`/projects?${params.toString()}`);
   },
 
-  getById: (id: string) => apiCall<Idea>(`/ideas/${id}`),
+  getById: (id: string) => apiCall<Idea>(`/projects/${id}`),
 
-  create: (data: Partial<Idea>) => apiCall<Idea>('/ideas', {
+  create: (data: Partial<Idea>) => apiCall<Idea>('/projects', {
     method: 'POST',
     body: JSON.stringify(data),
   }),
 
-  update: (id: string, data: Partial<Idea>) => apiCall<Idea>(`/ideas/${id}`, {
+  update: (id: string, data: Partial<Idea>) => apiCall<Idea>(`/projects/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(data),
   }),
 
-  delete: (id: string) => apiCall<void>(`/ideas/${id}`, {
+  delete: (id: string) => apiCall<void>(`/projects/${id}`, {
     method: 'DELETE',
   }),
 
-  getUserIdeas: () => apiCall<Idea[]>('/user/ideas'),
+  getUserIdeas: () => apiCall<Idea[]>('/user/projects'),
 };
 
 export const commentsAPI = {
