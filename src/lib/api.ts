@@ -12,21 +12,19 @@ export interface IdeaFilters {
 }
 
 const getApiBaseUrl = (): string => {
-  const explicitUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined') {
+    const { hostname } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:5000';
+    }
+  }
+
+  const explicitUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_SERVER_URL;
   if (explicitUrl) {
     return explicitUrl.replace(/\/$/, '');
   }
 
-  if (typeof window !== 'undefined') {
-    const { protocol, hostname } = window.location;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return `${protocol}//${hostname}:5000`;
-    }
-
-    return window.location.origin;
-  }
-
-  return 'http://localhost:5000';
+  return 'https://community-spark-server.vercel.app';
 };
 
 export const apiCall = async <T = unknown>(endpoint: string, options: ApiCallOptions = {}): Promise<T> => {
