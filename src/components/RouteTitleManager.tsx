@@ -8,13 +8,13 @@ const BASE_TITLE = "Community Spark";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/": "Home",
-  "/ideas": "Projects",
+  "/projects": "Projects",
   "/about": "About",
   "/contact": "Contact",
   "/resources": "Resources",
-  "/add-idea": "Add Project",
-  "/my-ideas": "My Projects",
-  "/my-interactions": "My Contributions",
+  "/add-project": "Add Project",
+  "/my-projects": "My Projects",
+  "/my-contributions": "My Contributions",
   "/login": "Login",
   "/register": "Register",
   "/profile": "My Profile",
@@ -33,7 +33,7 @@ const getTitleFromPath = (pathname: string) => {
     return ROUTE_TITLES[pathname];
   }
 
-  if (pathname.startsWith("/ideas/")) {
+  if (pathname.startsWith("/projects/")) {
     return "Project Details";
   }
 

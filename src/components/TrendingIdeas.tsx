@@ -19,7 +19,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
           <p className="text-sm font-semibold tracking-[0.25em] uppercase text-emerald-600">Trending Initiatives</p>
           <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">Explore community initiatives people are supporting right now</h2>
         </div>
-        <Link href="/ideas" className="hidden sm:inline-flex">
+        <Link href="/projects" className="hidden sm:inline-flex">
           <Button variant="outline">View All Projects</Button>
         </Link>
       </div>
@@ -37,11 +37,11 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
               key={idea._id}
               role="button"
               tabIndex={0}
-              onClick={() => window.location.assign(`/ideas/${idea._id}`)}
+              onClick={() => window.location.assign(`/projects/${idea._id}`)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
-                  window.location.assign(`/ideas/${idea._id}`);
+                  window.location.assign(`/projects/${idea._id}`);
                 }
               }}
               className="group flex h-full flex-col overflow-hidden rounded-2xl surface-card transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
@@ -80,7 +80,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
                 </div>
 
                 <div className="mt-auto pt-5">
-                  <Link href={`/ideas/${idea._id}`} className="inline-flex w-full">
+                  <Link href={`/projects/${idea._id}`} className="inline-flex w-full">
                     <Button className="w-full" variant="primary">
                       View Details
                     </Button>

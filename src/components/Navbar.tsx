@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link href="/ideas" className={navLinkClass(isActive("/ideas"))}>
+            <Link href="/projects" className={navLinkClass(isActive("/projects"))}>
               Projects
             </Link>
           </li>
@@ -70,17 +70,17 @@ const Navbar: React.FC = () => {
           {isAuthenticated && (
             <>
               <li>
-                <Link href="/add-idea" className={navLinkClass(isActive("/add-idea"))}>
+                <Link href="/add-project" className={navLinkClass(isActive("/add-project"))}>
                   Add Project
                 </Link>
               </li>
               <li>
-                <Link href="/my-ideas" className={navLinkClass(isActive("/my-ideas"))}>
+                <Link href="/my-projects" className={navLinkClass(isActive("/my-projects"))}>
                   My Projects
                 </Link>
               </li>
               <li>
-                <Link href="/my-interactions" className={navLinkClass(isActive("/my-interactions"))}>
+                <Link href="/my-contributions" className={navLinkClass(isActive("/my-contributions"))}>
                   My Contributions
                 </Link>
               </li>
@@ -172,24 +172,24 @@ const Navbar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link href="/ideas" className="font-medium">
+            <Link href="/projects" className="font-medium">
               Projects
             </Link>
           </li>
           {isAuthenticated && (
             <>
               <li>
-                <Link href="/add-idea" className="font-medium">
+                <Link href="/add-project" className="font-medium">
                   Add
                 </Link>
               </li>
               <li>
-                <Link href="/my-ideas" className="font-medium">
+                <Link href="/my-projects" className="font-medium">
                   My Projects
                 </Link>
               </li>
               <li>
-                <Link href="/my-interactions" className="font-medium">
+                <Link href="/my-contributions" className="font-medium">
                   Contributions
                 </Link>
               </li>

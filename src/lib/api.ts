@@ -26,7 +26,7 @@ const getApiBaseUrl = (): string => {
     return window.location.origin;
   }
 
-  throw new Error('API base URL is not configured. Set NEXT_PUBLIC_API_URL.');
+  return 'http://localhost:5000';
 };
 
 export const apiCall = async <T = unknown>(endpoint: string, options: ApiCallOptions = {}): Promise<T> => {
