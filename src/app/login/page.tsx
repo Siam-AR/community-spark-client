@@ -14,29 +14,15 @@ import {
 } from '@heroui/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { sanitizeRedirectPath } from '@/lib/auth-redirect';
-
-declare global {
-  interface Window {
-    google?: {
-      accounts: {
-        id: {
-          initialize: (options: { client_id: string; callback: (response: { credential: string }) => void }) => void;
-          renderButton: (element: HTMLElement, options: { type: string; theme: string; size: string; text: string }) => void;
-          prompt: (callback: (notification?: { isNotDisplayed?: () => boolean; isSkippedMoment?: () => boolean; getNotDisplayedReason?: () => string; getSkippedReason?: () => string }) => void) => void;
-        };
-      };
-    };
-  }
-}
 
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, googleLogin } = useAuth();
   const { showToast } = useToast();
-  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID || '';
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -91,6 +77,30 @@ function LoginPageContent() {
     [googleLogin, showToast, router, redirectTo],
   );
 
+  const handleGoogleSignIn = () => {
+    if (!googleClientId) {
+      setGoogleError('Google sign-in is not configured for this deployment yet.');
+      return;
+    }
+
+    if (typeof window === 'undefined' || !window.google?.accounts?.id) {
+      setGoogleError('Google sign-in is not available right now. Please refresh and try again.');
+      return;
+    }
+
+    try {
+      setGoogleError('');
+      window.google.accounts.id.prompt((notification) => {
+        if (notification?.isNotDisplayed?.() || notification?.isSkippedMoment?.()) {
+          setGoogleError('Google sign-in prompt was not displayed. Please try again in a moment.');
+        }
+      });
+    } catch (err) {
+      console.warn('Google sign-in prompt failed', err);
+      setGoogleError('Google sign-in could not be started. Please try again.');
+    }
+  };
+
   useEffect(() => {
     if (!googleClientId || initializedRef.current) return;
 
@@ -98,11 +108,13 @@ function LoginPageContent() {
 
     const initializeGoogle = () => {
       try {
-        if (window.google && window.google.accounts) {
+        if (window.google?.accounts) {
           setGoogleError('');
           window.google.accounts.id.initialize({
             client_id: googleClientId,
             callback: handleGoogleResponse,
+            ux_mode: 'popup',
+            auto_select: false,
           });
 
           try {
@@ -125,6 +137,11 @@ function LoginPageContent() {
         console.warn('Google Sign-In initialization error', err);
       }
     };
+
+    if (window.google?.accounts) {
+      initializeGoogle();
+      return;
+    }
 
     const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://accounts.google.com/gsi/client"]');
     if (existingScript) {
@@ -258,18 +275,11 @@ function LoginPageContent() {
         </Form>
 
         <div className="text-center my-4 text-gray-600">Or continue with</div>
-        <div ref={googleButtonRef} id="google-signin-btn" className="mt-3" />
-
+        <div className="flex justify-center">
+          <div ref={googleButtonRef} className="min-h-11" />
+        </div>
         {googleError && (
-          <p className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
-            {googleError}
-          </p>
-        )}
-
-        {!googleClientId && !googleError && (
-          <p className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
-            Google sign-in is not configured. Add NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable it.
-          </p>
+          <div className="mt-3 text-center text-sm text-red-600">{googleError}</div>
         )}
 
         <div className="mt-6 text-center">
