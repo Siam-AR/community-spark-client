@@ -157,12 +157,12 @@ export default function IdeaPage() {
   };
 
   return (
-    <div className="px-4 py-6 md:py-10 text-slate-900">
-      <section className="ideas-hero relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white px-5 py-7 shadow-[0_20px_70px_rgba(15,23,42,0.08)] md:px-8 md:py-10">
+    <div className="px-4 py-6 text-slate-900 md:py-10">
+      <section className="ideas-hero relative overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-white px-5 py-7 shadow-[var(--shadow-soft)] md:px-8 md:py-10">
         <div className="ideas-hero-bg absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.10),transparent_34%),radial-gradient(circle_at_top_right,rgba(6,182,212,0.08),transparent_30%),linear-gradient(135deg,rgba(255,255,255,1),rgba(248,250,252,1))]" />
         <div className="relative z-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <div className="space-y-5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-cyan-500/15 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
+            <span className="theme-badge px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em]">
               <FaFilter className="text-[0.7rem]" />
               Browse Community Projects
             </span>
@@ -182,7 +182,7 @@ export default function IdeaPage() {
                 { value: ideas.length, label: 'Filtered projects available', icon: FaSearch },
               ].map((stat) => (
                 <div key={stat.label} className="ideas-hero-stat rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <stat.icon className="text-cyan-600" />
+                  <stat.icon className="text-[var(--brand-emerald)]" />
                   <p className="mt-3 text-2xl font-bold text-slate-900">{stat.value}</p>
                   <p className="text-sm text-slate-600">{stat.label}</p>
                 </div>
@@ -190,12 +190,12 @@ export default function IdeaPage() {
             </div>
           </div>
 
-          <div className="ideas-hero-filters rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm md:p-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-700">Filters</p>
+          <div className="ideas-hero-filters rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-muted)] p-5 shadow-sm md:p-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand-emerald)]">Filters</p>
             <div className="mt-4 space-y-4">
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">Search by title</span>
-                <div className="ideas-hero-input flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm">
+                <div className="ideas-hero-input flex items-center gap-3 rounded-2xl border border-[var(--surface-border)] bg-white px-4 py-3 text-slate-700 shadow-sm">
                   <FaSearch className="shrink-0 text-slate-400" />
                   <input
                     value={searchValue}
@@ -246,7 +246,7 @@ export default function IdeaPage() {
                 </label>
 
                 <div className="flex items-end">
-                  <Button onPress={resetFilters} className="h-12.5 w-full border border-slate-200 bg-white text-slate-700 shadow-sm" variant="outline">
+                  <Button onPress={resetFilters} className="theme-btn-secondary h-12.5 w-full" variant="outline">
                     Reset Filters
                   </Button>
                 </div>
@@ -258,16 +258,16 @@ export default function IdeaPage() {
 
       <section className="mt-8">
         {loading ? (
-          <div className="h-[55vh] rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+          <div className="theme-section h-[55vh]">
             <Loader message="Loading community projects..." />
           </div>
         ) : error ? (
-          <div className="rounded-[2rem] border border-rose-200 bg-rose-50 p-6 text-rose-900 shadow-sm">
+          <div className="theme-card-soft rounded-[2rem] p-6 text-rose-900">
             <p className="text-lg font-semibold">Unable to load projects</p>
             <p className="mt-2 text-sm text-rose-700">{error}</p>
           </div>
         ) : ideas.length === 0 ? (
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-slate-700 shadow-sm">
+          <div className="theme-section p-8 text-center text-slate-700">
             <p className="text-2xl font-bold text-slate-900">No projects found</p>
             <p className="mt-3 text-sm text-slate-600">Try a different search term, category, or date range.</p>
             <div className="mt-6 flex justify-center">
@@ -285,7 +285,7 @@ export default function IdeaPage() {
                 tabIndex={0}
                 onClick={() => openIdeaDetails(idea._id)}
                 onKeyDown={(event) => handleCardKeyDown(event, idea._id)}
-                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
+                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-bg)] shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[var(--brand-emerald)] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-emerald)]/30"
               >
                 <div className="relative h-56 overflow-hidden bg-slate-100">
                   <div
@@ -294,7 +294,7 @@ export default function IdeaPage() {
                       backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.08), rgba(15,23,42,0.12)), url(${idea.imageURL || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop'})`,
                     }}
                   />
-                  <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-cyan-700 shadow-sm backdrop-blur-sm">
+                  <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[var(--brand-emerald)] shadow-sm backdrop-blur-sm">
                     {idea.category || 'Uncategorized'}
                   </div>
                 </div>
@@ -315,11 +315,11 @@ export default function IdeaPage() {
 
                   <div className="mt-4 grid gap-3 text-sm text-slate-700">
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700">Support Needed</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--brand-emerald)]">Support Needed</p>
                       <p className="mt-1 text-sm text-slate-700">{formatSupportNeeded(idea)}</p>
                     </div>
                     <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaUser className="text-cyan-600" />
+                      <FaUser className="text-[var(--brand-emerald)]" />
                       <span>{idea.userName || idea.userEmail || 'Anonymous builder'}</span>
                     </div>
                   </div>
@@ -327,10 +327,10 @@ export default function IdeaPage() {
                   <div className="mt-auto pt-5">
                     <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
                       <span className="inline-flex items-center gap-2">
-                        <FaCalendarAlt className="text-cyan-600" />
+                        <FaCalendarAlt className="text-[var(--brand-emerald)]" />
                         {formatDate(idea.createdAt)}
                       </span>
-                      <span className="font-semibold text-cyan-700">Open details →</span>
+                      <span className="font-semibold text-[var(--brand-emerald)]">Open details →</span>
                     </div>
                   </div>
                 </div>

@@ -224,20 +224,20 @@ function LoginPageContent() {
   };
 
   return (
-    <Card className="border max-w-2xl mx-auto py-8 md:py-10 mt-5 px-4 md:px-8">
+    <Card className="theme-section mx-auto mt-5 max-w-2xl px-4 py-8 md:px-8 md:py-10">
       <div>
-        <h1 className="text-center text-2xl md:text-3xl font-bold mb-2">Sign In to Community Spark</h1>
-        <p className="text-center text-gray-600 mb-6">Share and explore meaningful community projects</p>
+        <h1 className="mb-2 text-center text-2xl font-bold md:text-3xl">Sign In to Community Spark</h1>
+        <p className="mb-6 text-center text-slate-600">Share and explore meaningful community projects</p>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3">
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}
 
         {success && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-sm text-green-700">{success}</p>
+          <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+            <p className="text-sm text-emerald-700">{success}</p>
           </div>
         )}
 
@@ -283,19 +283,19 @@ function LoginPageContent() {
           </TextField>
 
           <div className="text-right">
-            <Link href="/forgot-password" className="text-sm text-purple-600 hover:text-purple-700 font-medium">
+            <Link href="/forgot-password" className="text-sm font-medium text-(--brand-emerald) hover:text-(--brand-gold)">
               Forgot Password?
             </Link>
           </div>
 
           <div className="flex gap-2">
-            <Button type="submit" className="w-full bg-linear-to-r from-purple-500 to-pink-500 text-white" isDisabled={isLoading}>
+            <Button type="submit" className="theme-btn-primary w-full" isDisabled={isLoading}>
               {isLoading ? 'LOGGING IN...' : 'LOG IN'}
             </Button>
           </div>
         </Form>
 
-        <div className="text-center my-4 text-gray-600">Or continue with</div>
+        <div className="my-4 text-center text-slate-600">Or continue with</div>
         <div className="flex justify-center">
           <div ref={googleButtonRef} className="min-h-11" />
         </div>
@@ -304,9 +304,9 @@ function LoginPageContent() {
         )}
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-slate-600">
             {"Don't have an account?"}
-            <Link href={`/register${redirectTo !== '/' ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`} className="text-purple-600 hover:text-purple-700 font-semibold ml-1">
+            <Link href={`/register${redirectTo !== '/' ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`} className="ml-1 font-semibold text-(--brand-emerald) hover:text-(--brand-gold)">
               Sign Up
             </Link>
           </p>

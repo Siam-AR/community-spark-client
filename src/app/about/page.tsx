@@ -24,7 +24,7 @@ export default function AboutPage() {
   return (
     <div className="px-4 py-10 md:py-14 text-slate-900">
       <div className="mx-auto max-w-6xl space-y-8">
-        <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.08)] md:p-12">
+        <section className="theme-section overflow-hidden p-8 md:p-12">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-600">About Community Spark</p>
           <h1 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">A place for community ideas, support, and shared action.</h1>
           <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
@@ -47,7 +47,7 @@ export default function AboutPage() {
             const Icon = item.icon;
 
             return (
-              <Card key={item.title} className="border border-slate-200 p-6 shadow-sm">
+              <Card key={item.title} className="theme-card-soft p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-amber-500 text-white">
                   <Icon />
                 </div>

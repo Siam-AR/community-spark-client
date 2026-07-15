@@ -5,61 +5,35 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative mt-24 overflow-hidden bg-slate-950 text-white">
-      <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" />
-      <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
-
-      <div className="h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
-
+    <footer className="relative mt-20 overflow-hidden border-t border-emerald-500/20 bg-slate-950 text-slate-100 shadow-[0_-20px_50px_rgba(2,6,23,0.35)]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(47,125,75,0.18),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(209,135,26,0.16),transparent_34%)]" />
+      <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-[var(--brand-emerald)]/12 blur-3xl" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[var(--brand-gold)]/12 blur-3xl" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-16">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 md:gap-12">
           <div>
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white text-xl font-black text-slate-900">
+              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/95 text-xl font-black text-slate-950">
                 CS
               </div>
               <h2 className="text-2xl font-black tracking-tight">Community Spark</h2>
             </div>
 
-            <p className="text-sm leading-7 text-gray-400">
-              Share community projects, invite support, and grow practical ideas
-              that make neighborhoods and local groups stronger.
+            <p className="text-sm leading-7 text-slate-300">
+              Share community projects, invite support, and grow practical ideas that make neighborhoods and local groups stronger.
             </p>
 
             <div className="mt-6 flex gap-4">
-              <a
-                href="https://www.facebook.com"
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-blue-600"
-              >
+              <a href="https://www.facebook.com" target="_blank" rel="noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-slate-100 transition hover:bg-emerald-500/90 hover:text-white">
                 <FaFacebookF size={16} />
               </a>
-
-              <a
-                href="https://www.instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-pink-500"
-              >
+              <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-slate-100 transition hover:bg-amber-500/90 hover:text-white">
                 <FaInstagram size={16} />
               </a>
-
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-slate-700"
-              >
+              <a href="https://x.com" target="_blank" rel="noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-slate-100 transition hover:bg-slate-700 hover:text-white">
                 <FaXTwitter size={16} />
               </a>
-
-              <a
-                href="https://www.linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-blue-500"
-              >
+              <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-slate-100 transition hover:bg-blue-600 hover:text-white">
                 <FaLinkedinIn size={16} />
               </a>
             </div>
@@ -67,76 +41,46 @@ const Footer: React.FC = () => {
 
           <div>
             <h3 className="mb-5 text-lg font-semibold">Quick Links</h3>
-            <ul className="space-y-4 text-sm text-gray-400">
-              <li>
-                <Link href="/" className="transition hover:text-cyan-400">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="transition hover:text-cyan-400">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/projects" className="transition hover:text-emerald-400">
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/resources" className="transition hover:text-emerald-400">
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="transition hover:text-emerald-400">
-                  Contact
-                </Link>
-              </li>
+            <ul className="space-y-4 text-sm text-slate-300">
+              <li><Link href="/" className="transition hover:text-amber-300">Home</Link></li>
+              <li><Link href="/about" className="transition hover:text-amber-300">About</Link></li>
+              <li><Link href="/projects" className="transition hover:text-amber-300">Projects</Link></li>
+              <li><Link href="/resources" className="transition hover:text-amber-300">Resources</Link></li>
+              <li><Link href="/contact" className="transition hover:text-amber-300">Contact</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="mb-5 text-lg font-semibold">Community Topics</h3>
-            <ul className="space-y-4 text-sm text-gray-400">
-              <li className="cursor-pointer transition hover:text-emerald-400">Education</li>
-              <li className="cursor-pointer transition hover:text-emerald-400">Environment</li>
-              <li className="cursor-pointer transition hover:text-emerald-400">Health</li>
-              <li className="cursor-pointer transition hover:text-emerald-400">Community Welfare</li>
+            <ul className="space-y-4 text-sm text-slate-300">
+              <li className="transition hover:text-amber-300">Education</li>
+              <li className="transition hover:text-amber-300">Environment</li>
+              <li className="transition hover:text-amber-300">Health</li>
+              <li className="transition hover:text-amber-300">Community Welfare</li>
             </ul>
           </div>
 
           <div>
             <h3 className="mb-5 text-lg font-semibold">Contact</h3>
-            <div className="space-y-4 text-sm text-gray-400">
+            <div className="space-y-4 text-sm text-slate-300">
               <p>Email: hello@communityspark.org</p>
               <p>Phone: +880 1234-567890</p>
               <p>Location: Dhaka, Bangladesh</p>
             </div>
-
-            <Link href="/about" className="mt-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-amber-500 px-6 py-3 text-sm font-semibold shadow-lg shadow-emerald-500/20 transition duration-300 hover:scale-105">
+            <Link href="/about" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,var(--brand-emerald),var(--brand-gold))] px-6 py-3 text-sm font-semibold text-white shadow-lg transition duration-300 hover:scale-105">
               Learn More
             </Link>
           </div>
         </div>
 
-        <div className="my-10 h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
+        <div className="my-10 h-px w-full bg-white/10" />
 
-        <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-500 md:flex-row">
-          <p>
-            © {new Date().getFullYear()} Community Spark - All rights reserved.
-          </p>
-
+        <div className="flex flex-col items-center justify-between gap-4 text-sm text-slate-400 md:flex-row">
+          <p>© {new Date().getFullYear()} Community Spark - All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <Link href="/about" className="transition hover:text-white">
-              About
-            </Link>
-            <Link href="/contact" className="transition hover:text-white">
-              Contact
-            </Link>
-            <Link href="/resources" className="transition hover:text-white">
-              Resources
-            </Link>
+            <Link href="/about" className="transition hover:text-amber-300">About</Link>
+            <Link href="/contact" className="transition hover:text-amber-300">Contact</Link>
+            <Link href="/resources" className="transition hover:text-amber-300">Resources</Link>
           </div>
         </div>
       </div>

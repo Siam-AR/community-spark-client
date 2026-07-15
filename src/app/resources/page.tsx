@@ -24,7 +24,7 @@ export default function ResourcesPage() {
   return (
     <div className="px-4 py-10 md:py-14 text-slate-900">
       <div className="mx-auto max-w-6xl space-y-8">
-        <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.08)] md:p-12">
+        <section className="theme-section p-8 md:p-12">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-600">Community Resources</p>
           <h1 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">Helpful starting points for community projects.</h1>
           <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
@@ -37,7 +37,7 @@ export default function ResourcesPage() {
             const Icon = guide.icon;
 
             return (
-              <Card key={guide.title} className="border border-slate-200 p-6 shadow-sm">
+              <Card key={guide.title} className="theme-card-soft p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-amber-500 text-white">
                   <Icon />
                 </div>
@@ -48,7 +48,7 @@ export default function ResourcesPage() {
           })}
         </section>
 
-        <section className="rounded-[2rem] border border-emerald-100 bg-emerald-50 p-8">
+        <section className="theme-card-soft rounded-[2rem] p-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="text-2xl font-bold text-slate-900">Ready to share a project?</h2>

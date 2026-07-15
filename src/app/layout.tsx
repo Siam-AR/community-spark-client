@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full container mx-auto" suppressHydrationWarning>
+      <body className="theme-shell" suppressHydrationWarning>
         <Script id="theme-init" strategy="beforeInteractive">
           {`(() => {
             try {

@@ -27,7 +27,7 @@ export default function ContactPage() {
   return (
     <div className="px-4 py-10 md:py-14 text-slate-900">
       <div className="mx-auto max-w-6xl space-y-8">
-        <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.08)] md:p-12">
+        <section className="theme-section p-8 md:p-12">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-600">Contact</p>
           <h1 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">Reach out about a project, idea, or partnership.</h1>
           <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
@@ -40,7 +40,7 @@ export default function ContactPage() {
             const Icon = item.icon;
 
             return (
-              <Card key={item.title} className="border border-slate-200 p-6 shadow-sm">
+              <Card key={item.title} className="theme-card-soft p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-amber-500 text-white">
                   <Icon />
                 </div>
@@ -55,7 +55,7 @@ export default function ContactPage() {
         </section>
 
         <section className="grid gap-5 md:grid-cols-[1.2fr_0.8fr]">
-          <Card className="border border-slate-200 p-6 shadow-sm md:p-8">
+          <Card className="theme-card-soft p-6 md:p-8">
             <h2 className="text-2xl font-bold">Need help with a project page?</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
               If you are stuck posting a project or updating your profile, start by browsing the projects page or returning to your account.
@@ -70,7 +70,7 @@ export default function ContactPage() {
             </div>
           </Card>
 
-          <Card className="border border-slate-200 p-6 shadow-sm md:p-8">
+          <Card className="theme-card-soft p-6 md:p-8">
             <h2 className="text-xl font-bold">Follow the project</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
               Community Spark is built to support local collaboration, so feedback is always welcome.
