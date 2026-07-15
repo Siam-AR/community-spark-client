@@ -3,13 +3,11 @@
 import { Button } from '@heroui/react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import Marquee from 'react-fast-marquee';
 import Loader from '@/components/Loader';
-import TrendingIdeas from '@/components/TrendingIdeas';
-import InfoHighlights from '@/components/InfoHighlights';
-import ParticipationSteps from '@/components/ParticipationSteps';
-import CommunityResources from '@/components/CommunityResources';
 import { ideasAPI } from '@/lib/api';
-import { FaArrowRight, FaChartLine, FaHandsHelping, FaRegCommentDots, FaSeedling } from 'react-icons/fa';
+import { FaArrowRight, FaChartBar, FaChartLine, FaHandsHelping, FaSeedling } from 'react-icons/fa';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -44,53 +42,21 @@ const slides = [
   },
 ];
 
+const marqueeItems = [
+  { label: 'Community-led ideas', tone: 'emerald' },
+  { label: 'Local impact', tone: 'gold' },
+  { label: 'Shared support', tone: 'emerald' },
+  { label: 'Fast feedback', tone: 'gold' },
+  { label: 'Clear goals', tone: 'emerald' },
+  { label: 'Meaningful action', tone: 'gold' },
+];
+
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [featuredIdeas, setFeaturedIdeas] = useState<Idea[]>([]);
   const [ideasLoading, setIdeasLoading] = useState(true);
   const [ideasError, setIdeasError] = useState('');
 
-  const fallbackFeaturedIdeas: Idea[] = [
-    {
-      _id: '689b5a2d8f1c4d0b1a2e3f41',
-      title: 'Neighborhood Food Garden',
-      shortDescription: 'A shared garden that grows fresh produce for local families.',
-      category: 'Environment',
-      imageURL: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80',
-      location: 'Dhaka North',
-      supportNeeded: 'Volunteers and basic gardening tools',
-      estimatedBudget: '$1200',
-      userName: 'Aisha Rahman',
-      createdAt: '2026-01-12T10:00:00.000Z',
-      commentCount: 6,
-    },
-    {
-      _id: '689b5a2d8f1c4d0b1a2e3f43',
-      title: 'Youth Coding Workshop',
-      shortDescription: 'Weekly sessions that help local teens learn practical coding skills.',
-      category: 'Education',
-      imageURL: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
-      location: 'Uttara',
-      supportNeeded: 'Mentors and laptops',
-      estimatedBudget: '$1800',
-      userName: 'Nabil Hasan',
-      createdAt: '2026-02-03T14:30:00.000Z',
-      commentCount: 4,
-    },
-    {
-      _id: '689b5a2d8f1c4d0b1a2e3f45',
-      title: 'Community Health Checkpoint',
-      shortDescription: 'A pop-up health awareness event for families in underserved areas.',
-      category: 'Health',
-      imageURL: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
-      location: 'Banani',
-      supportNeeded: 'Health volunteers and screening materials',
-      estimatedBudget: '$2200',
-      userName: 'Mina Akter',
-      createdAt: '2026-03-18T09:15:00.000Z',
-      commentCount: 8,
-    },
-  ];
 
   const impactStats = useMemo(() => {
     const totalProjects = featuredIdeas.length;
@@ -123,26 +89,15 @@ export default function Home() {
     ];
   }, [featuredIdeas]);
 
-  const communityVoices = [
-    {
-      name: 'Ayesha Rahman',
-      role: 'Volunteer coordinator',
-      quote:
-        'Community Spark made it easy to explain a neighborhood cleanup and find people who wanted to help the same week.',
-    },
-    {
-      name: 'Tanvir Hassan',
-      role: 'Youth mentor',
-      quote:
-        'The project pages feel practical and clear, so supporters can quickly understand what a local initiative needs.',
-    },
-    {
-      name: 'Nadia Islam',
-      role: 'Community organizer',
-      quote:
-        'It is a simple place to gather ideas, feedback, and momentum around projects that actually improve daily life.',
-    },
-  ];
+  const chartData = useMemo(() => {
+    const grouped = featuredIdeas.reduce<Record<string, number>>((acc, idea) => {
+      const key = idea.category || 'Community';
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+
+    return Object.entries(grouped).map(([name, count]) => ({ name, count }));
+  }, [featuredIdeas]);
 
   const featuredProjectCards = featuredIdeas.slice(0, 3);
 
@@ -254,8 +209,7 @@ export default function Home() {
         </Swiper>
       </div>
 
-      <TrendingIdeas ideas={featuredIdeas} loading={ideasLoading} error={ideasError} />
-        <section className="max-w-7xl mx-auto rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <section className="max-w-7xl mx-auto rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-bg)] p-6 shadow-[var(--shadow-soft)] md:p-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--brand-emerald)]">Featured Projects</p>
@@ -310,70 +264,74 @@ export default function Home() {
               );
             })}
           </div>
+
+          <div className="mt-8 rounded-[1.5rem] border border-[var(--surface-border)] bg-[var(--surface-muted)] p-5">
+            <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-emerald-600">
+              <FaChartBar />
+              Project distribution by category
+            </div>
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" />
+                  <XAxis dataKey="name" tickLine={false} axisLine={false} />
+                  <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="url(#featuredBarGradient)" radius={[8, 8, 0, 0]} />
+                  <defs>
+                    <linearGradient id="featuredBarGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--brand-emerald)" />
+                      <stop offset="100%" stopColor="var(--brand-gold)" />
+                    </linearGradient>
+                  </defs>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </section>
 
-        <TrendingIdeas ideas={featuredIdeas} loading={ideasLoading} error={ideasError} />
+        <section className="max-w-7xl mx-auto overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[linear-gradient(135deg,var(--surface-bg),rgba(47,125,75,0.08))] p-4 shadow-[var(--shadow-soft)] sm:p-6 md:p-8">
+          <div className="rounded-[1.25rem] border border-white/30 bg-white/70 p-3 shadow-inner backdrop-blur-sm dark:bg-slate-900/50">
+            <Marquee
+              direction="left"
+              speed={38}
+              pauseOnHover
+              pauseOnClick
+              gradient={false}
+              className="py-2"
+            >
+              {[...marqueeItems, ...marqueeItems].map((item, index) => (
+                <span
+                  key={`${item.label}-${index}`}
+                  className={`mx-2 inline-flex items-center rounded-full border px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] shadow-sm ${
+                    item.tone === 'gold'
+                      ? 'border-[var(--brand-gold)]/25 bg-[var(--brand-gold)]/10 text-[var(--brand-gold)]'
+                      : 'border-[var(--brand-emerald)]/25 bg-[var(--brand-emerald)]/10 text-[var(--brand-emerald)]'
+                  }`}
+                >
+                  {item.label}
+                </span>
+              ))}
+            </Marquee>
+          </div>
+        </section>
 
-        <section className="max-w-7xl mx-auto rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <section className="max-w-7xl mx-auto rounded-[2rem] border border-[var(--surface-border)] bg-[linear-gradient(135deg,var(--brand-emerald),var(--brand-gold))] p-8 text-white shadow-[var(--shadow-soft)] md:p-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--brand-emerald)]">Impact Highlights</p>
-              <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">How the platform is helping communities move faster</h2>
+              <p className="text-sm font-semibold tracking-[0.25em] uppercase text-white/80">Ready to begin</p>
+              <h2 className="mt-2 text-2xl md:text-4xl font-bold">Bring a community idea forward and find people who care.</h2>
             </div>
-            <p className="max-w-2xl text-sm text-theme-muted md:text-right">
-              These numbers give a quick snapshot of live community activity and the conversations taking place around it.
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {impactStats.map((stat) => {
-              const Icon = stat.icon;
-
-              return (
-                <div key={stat.label} className="theme-card-soft p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-600">{stat.label}</p>
-                      <p className="mt-2 text-3xl font-black text-slate-900">{stat.value}</p>
-                    </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,var(--brand-emerald),var(--brand-gold))] text-white shadow-sm">
-                      <Icon />
-                    </div>
-                  </div>
-                  <p className="mt-4 text-sm leading-7 text-theme-muted">{stat.hint}</p>
-                </div>
-              );
-            })}
+            <div className="flex flex-wrap gap-3">
+              <Link href="/add-project">
+                <Button className="theme-btn-secondary bg-white/95 text-slate-900 hover:bg-white">Start a Project</Button>
+              </Link>
+              <Link href="/projects">
+                <Button className="theme-btn-secondary border-white/40 bg-transparent text-white hover:bg-white/10">Browse Projects</Button>
+              </Link>
+            </div>
           </div>
         </section>
-
-        <section className="max-w-7xl mx-auto rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--brand-emerald)]">Community Voices</p>
-              <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">What supporters and organizers are saying</h2>
-            </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
-              <FaRegCommentDots />
-              Real feedback from community builders
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {communityVoices.map((voice) => (
-              <article key={voice.name} className="theme-card-soft p-5">
-                <p className="text-sm leading-7 text-slate-700">&ldquo;{voice.quote}&rdquo;</p>
-                <div className="mt-5 border-t border-slate-200 pt-4">
-                  <h3 className="font-semibold text-slate-900">{voice.name}</h3>
-                  <p className="text-sm text-theme-muted">{voice.role}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      <InfoHighlights />
-      <ParticipationSteps />
-      <CommunityResources />
     </div>
   );
 }
