@@ -74,12 +74,11 @@ export default function IdeaPage() {
 
         const data = await ideasAPI.getAll(filters);
         if (!active) return;
-        const resolvedIdeas = Array.isArray(data) && data.length > 0 ? data : fallbackProjects;
-        setIdeas(resolvedIdeas);
+        setIdeas(Array.isArray(data) ? data : []);
         setError('');
       } catch (fetchError) {
         if (!active) return;
-        setIdeas(fallbackProjects);
+        setIdeas([]);
         setError(fetchError instanceof Error ? fetchError.message : 'Unable to load ideas right now.');
       } finally {
         if (active) {

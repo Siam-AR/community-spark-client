@@ -190,50 +190,19 @@ export const authAPI = {
 };
 
 export const ideasAPI = {
-  getFeatured: async () => {
-    try {
-      const data = await apiCall<Idea[]>('/projects/featured');
-      if (Array.isArray(data) && data.length > 0) {
-        return data;
-      }
-      return getFallbackProjects().slice(0, 3);
-    } catch (error) {
-      console.warn('Falling back to local project data for featured projects:', error);
-      return getFallbackProjects().slice(0, 3);
-    }
-  },
+  getFeatured: () => apiCall<Idea[]>('/projects/featured'),
 
-  getAll: async (filters: IdeaFilters = {}) => {
+  getAll: (filters: IdeaFilters = {}) => {
     const params = new URLSearchParams();
     if (filters.category) params.append('category', filters.category);
     if (filters.search) params.append('search', filters.search);
     if (filters.dateFrom) params.append('dateFrom', filters.dateFrom);
     if (filters.dateTo) params.append('dateTo', filters.dateTo);
 
-    try {
-      const data = await apiCall<Idea[]>(`/projects?${params.toString()}`);
-      if (Array.isArray(data) && data.length > 0) {
-        return data;
-      }
-      return getFallbackProjects(filters);
-    } catch (error) {
-      console.warn('Falling back to local project data for project list:', error);
-      return getFallbackProjects(filters);
-    }
+    return apiCall<Idea[]>(`/projects?${params.toString()}`);
   },
 
-  getById: async (id: string) => {
-    try {
-      const data = await apiCall<Idea>(`/projects/${id}`);
-      if (data && (data._id || data.id)) {
-        return data;
-      }
-      return getFallbackProjects().find((project) => project._id === id) ?? null;
-    } catch (error) {
-      console.warn('Falling back to local project data for project details:', error);
-      return getFallbackProjects().find((project) => project._id === id) ?? null;
-    }
-  },
+  getById: (id: string) => apiCall<Idea>(`/projects/${id}`),
 
   create: (data: Partial<Idea>) => apiCall<Idea>('/projects', {
     method: 'POST',

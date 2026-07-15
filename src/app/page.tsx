@@ -173,14 +173,13 @@ export default function Home() {
         const data = await ideasAPI.getFeatured();
 
         if (mounted) {
-          const resolvedIdeas = Array.isArray(data) && data.length > 0 ? data : fallbackFeaturedIdeas;
-          setFeaturedIdeas(resolvedIdeas);
+          setFeaturedIdeas(Array.isArray(data) ? data : []);
           setIdeasError('');
         }
       } catch (error) {
         if (mounted) {
           setIdeasError(error instanceof Error ? error.message : 'Failed to load trending initiatives.');
-          setFeaturedIdeas(fallbackFeaturedIdeas);
+          setFeaturedIdeas([]);
         }
       } finally {
         if (mounted) {
