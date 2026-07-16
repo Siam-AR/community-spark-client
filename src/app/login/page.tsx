@@ -41,6 +41,8 @@ function LoginPageContent() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [googleError, setGoogleError] = useState('');
+  const [demoEmail, setDemoEmail] = useState('demo.user@community.spark.com');
+  const [demoPassword, setDemoPassword] = useState('Demo.user@community.spark.com');
   const googleButtonRef = useRef<HTMLDivElement | null>(null);
   const initializedRef = useRef(false);
   const redirectTo = sanitizeRedirectPath(searchParams.get('redirectTo'));
@@ -194,6 +196,37 @@ function LoginPageContent() {
     };
   }, [handleGoogleResponse, googleClientId]);
 
+  const fillDemoCredentials = async () => {
+    setError('');
+    setSuccess('');
+    setDemoEmail('demo.user@community.spark.com');
+    setDemoPassword('Demo.user@community.spark.com');
+
+    const form = document.querySelector('form') as HTMLFormElement | null;
+    if (form) {
+      const emailInput = form.elements.namedItem('email') as HTMLInputElement | null;
+      const passwordInput = form.elements.namedItem('password') as HTMLInputElement | null;
+
+      if (emailInput) emailInput.value = 'demo.user@community.spark.com';
+      if (passwordInput) passwordInput.value = 'Demo.user@community.spark.com';
+    }
+
+    try {
+      await login({ email: 'demo.user@community.spark.com', password: 'Demo.user@community.spark.com' });
+      setSuccess('Demo sign in successful! Redirecting...');
+      showToast('Demo login successful!', 'success', 2000);
+
+      window.setTimeout(() => {
+        router.replace(redirectTo);
+      }, 1500);
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Demo sign in failed.';
+      setError(errorMsg);
+      showToast(errorMsg, 'error', 4000);
+      setIsLoading(false);
+    }
+  };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
@@ -288,9 +321,12 @@ function LoginPageContent() {
             </Link>
           </div>
 
-          <div className="flex gap-2">
-            <Button type="submit" className="theme-btn-primary w-full" isDisabled={isLoading}>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button type="submit" className="theme-btn-primary w-full sm:w-1/2" isDisabled={isLoading}>
               {isLoading ? 'LOGGING IN...' : 'LOG IN'}
+            </Button>
+            <Button type="button" variant="flat" className="w-full border-emerald-300 bg-emerald-50 text-emerald-700 sm:w-1/2" onPress={fillDemoCredentials} isDisabled={isLoading}>
+              Demo Login
             </Button>
           </div>
         </Form>
