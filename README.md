@@ -1,43 +1,124 @@
-# IdeaVault - Startup Idea Sharing Platform
+# Community Spark
 
-IdeaVault is a startup idea sharing platform where users can publish ideas, explore community submissions, and collaborate through comments and discussions.
+## Description
+Community Spark is a modern community project-sharing platform where users can discover, publish, and support local initiatives. The app makes it easy to browse community projects, view detailed project pages, add new ideas, and engage through comments.
 
-## Live Site
+## Live Project Link
+- Live site: https://community-spark-client.vercel.app/
 
-Live Site URL: https://community-spark-client-lilac.vercel.app/
+## Screenshot
+![Community Spark preview](./public/screenshot.svg)
 
-## Key Features
-
-- Browse trending startup ideas on the home page with a featured banner and idea cards.
-- Filter ideas by title, category, and date range from the Ideas page.
-- View private idea details with a full discussion thread, comment add/edit/delete, and timestamps.
-- Create and manage your own ideas with update and delete flows.
-- Track your activity in My Interactions, including ideas you commented on.
-- Sign in with email/password or Google, then return to your intended destination after auth.
-- Update your profile from the account dropdown when logged in.
-
-## Tech Stack
-
+## Technologies Used
 - Next.js 16
 - React 19
+- TypeScript
+- Tailwind CSS
 - HeroUI
-- Express.js
+- Recharts
+- Swiper
+- React Icons
+- Better Auth
 - MongoDB
-- JWT authentication
 
-## Getting Started
+## Core Features
+- Public homepage with featured projects and community stats
+- Browse projects with search, category filters, date filters, sorting, and pagination
+- View full project details publicly
+- Add, edit, and manage your own projects
+- Leave comments and interact with project posts
+- Secure authentication with login, registration, and Google login
+- Responsive layout with dark/light mode support
 
-1. Install dependencies in the client and server folders.
-2. Add the required environment variables in `.env` files.
-3. Start the server, then run the client development server.
+## Dependencies Used
+### Main dependencies
+- next
+- react
+- react-dom
+- @heroui/react
+- better-auth
+- mongodb
+- recharts
+- swiper
+- react-fast-marquee
+- react-icons
 
+### Development dependencies
+- typescript
+- tailwindcss
+- eslint
+- eslint-config-next
+- @types/react
+- @types/react-dom
+- @types/node
+
+## How to Run Locally
+### 1. Clone the repositories
+```bash
+git clone <your-client-repository-url>
+cd idea-vault-client
+
+git clone <your-server-repository-url>
+cd idea-vault-server
+```
+
+### 2. Install dependencies
 ```bash
 npm install
+```
+
+### 3. Set up environment variables
+The client only needs one environment file in the client project root. The server needs its own environment file in the server project root.
+
+#### Client (.env or .env.local in the client folder)
+```env
+BETTER_AUTH_SECRET=<generate-a-long-random-secret>
+BETTER_AUTH_URL=http://localhost:3000
+MONGODB_URI=mongodb+srv://<database-user>:<password>@<cluster-host>/?appName=<app-name>
+GOOGLE_CLIENT_ID=<your-google-client-id>
+GOOGLE_SECRET=<your-google-client-secret>
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=<your-google-client-id>
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+```
+
+> If you are using a local MongoDB instance instead of Atlas, you can replace the Mongo URI with:
+> `mongodb://127.0.0.1:27017/community-spark`
+
+#### Server (.env in the server folder)
+```env
+PORT=5000
+MONGODB_URI=mongodb+srv://<database-user>:<password>@<cluster-host>/?appName=<app-name>
+MONGODB_DB_NAME=community-spark
+JWT_SECRET=<generate-a-long-random-secret>
+CLIENT_URL=http://localhost:3000
+BETTER_AUTH_SECRET=<generate-a-long-random-secret>
+```
+
+### 4. Start the server
+```bash
 npm run dev
 ```
 
-## Notes
+### 5. Start the client
+```bash
+cd ../idea-vault-client
+npm run dev
+```
 
-- Error and success handling uses toast messages instead of default browser alerts.
-- Route titles, loading states, and private route guards are already implemented.
-- The UI is responsive for mobile, tablet, and desktop layouts.
+Open http://localhost:3000 in your browser.
+
+### 6. Build for production
+```bash
+npm run build
+npm run start
+```
+
+## Additional Resources
+- Backend API: https://community-spark-server.vercel.app
+- Server repository: https://github.com/Siam-AR/community-spark-server
+- Local development preview: http://127.0.0.1:3000
+- Live frontend: https://community-spark-client.vercel.app
+
+## Notes
+This project combines a polished user interface with a functional community-driven idea management experience for both visitors and authenticated users.
