@@ -5,7 +5,7 @@ import ProjectCard from '@/components/ProjectCard';
 import { ideasAPI } from '@/lib/api';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaFilter, FaSearch } from 'react-icons/fa';
 import type { Idea } from '@/types';
 
@@ -22,6 +22,10 @@ export default function IdeaPage() {
   const [category, setCategory] = useState('All Categories');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [sortBy, setSortBy] = useState('newest');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 8;
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -30,6 +34,10 @@ export default function IdeaPage() {
 
     return () => window.clearTimeout(timer);
   }, [searchValue]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, category, dateFrom, dateTo, sortBy]);
 
   useEffect(() => {
     let active = true;
@@ -85,7 +93,51 @@ export default function IdeaPage() {
     setCategory('All Categories');
     setDateFrom('');
     setDateTo('');
+    setSortBy('newest');
   };
+
+  const sortedIdeas = useMemo(() => {
+    const nextIdeas = [...ideas];
+
+    switch (sortBy) {
+      case 'oldest':
+        nextIdeas.sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''));
+        break;
+      case 'title-asc':
+        nextIdeas.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        break;
+      case 'title-desc':
+        nextIdeas.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+        break;
+      case 'newest':
+      default:
+        nextIdeas.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+        break;
+    }
+
+    return nextIdeas;
+  }, [ideas, sortBy]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedIdeas.length / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedIdeas = sortedIdeas.slice(startIndex, startIndex + itemsPerPage);
+
+  const visiblePageNumbers = useMemo(() => {
+    const pages = [] as number[];
+    const maxVisible = 5;
+    let start = Math.max(1, currentPage - 2);
+    const end = Math.min(totalPages, start + maxVisible - 1);
+
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+
+    for (let page = start; page <= end; page += 1) {
+      pages.push(page);
+    }
+
+    return pages;
+  }, [currentPage, totalPages]);
 
   const openIdeaDetails = (ideaId?: string) => {
     if (ideaId) router.push(`/projects/${ideaId}`);
@@ -93,7 +145,7 @@ export default function IdeaPage() {
 
   return (
     <div className="px-4 py-6 text-slate-900 md:py-10">
-      <section className="ideas-hero relative overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-white px-5 py-7 shadow-[var(--shadow-soft)] md:px-8 md:py-10">
+      <section className="ideas-hero relative overflow-hidden rounded-[2rem] border border-(--surface-border) bg-white px-5 py-7 shadow-(--shadow-soft) md:px-8 md:py-10">
         <div className="ideas-hero-bg absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.10),transparent_34%),radial-gradient(circle_at_top_right,rgba(6,182,212,0.08),transparent_30%),linear-gradient(135deg,rgba(255,255,255,1),rgba(248,250,252,1))]" />
         <div className="relative z-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <div className="space-y-5">
@@ -117,7 +169,7 @@ export default function IdeaPage() {
                 { value: ideas.length, label: 'Filtered projects available', icon: FaSearch },
               ].map((stat) => (
                 <div key={stat.label} className="ideas-hero-stat rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <stat.icon className="text-[var(--brand-emerald)]" />
+                  <stat.icon className="text-(--brand-emerald)" />
                   <p className="mt-3 text-2xl font-bold text-slate-900">{stat.value}</p>
                   <p className="text-sm text-slate-600">{stat.label}</p>
                 </div>
@@ -125,12 +177,12 @@ export default function IdeaPage() {
             </div>
           </div>
 
-          <div className="ideas-hero-filters rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-muted)] p-5 shadow-sm md:p-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand-emerald)]">Filters</p>
+          <div className="ideas-hero-filters rounded-3xl border border-(--surface-border) bg-(--surface-muted) p-5 shadow-sm md:p-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-(--brand-emerald)">Filters</p>
             <div className="mt-4 space-y-4">
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">Search by title</span>
-                <div className="ideas-hero-input flex items-center gap-3 rounded-2xl border border-[var(--surface-border)] bg-white px-4 py-3 text-slate-700 shadow-sm">
+                <div className="ideas-hero-input flex items-center gap-3 rounded-2xl border border-(--surface-border) bg-white px-4 py-3 text-slate-700 shadow-sm">
                   <FaSearch className="shrink-0 text-slate-400" />
                   <input
                     value={searchValue}
@@ -192,10 +244,33 @@ export default function IdeaPage() {
       </section>
 
       <section className="mt-8">
+        <div className="mb-6 flex flex-col gap-4 rounded-[1.75rem] border border-(--surface-border) bg-(--surface-bg) p-4 shadow-sm md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-(--brand-emerald)">Results</p>
+            <p className="mt-1 text-sm text-theme-muted">
+              Showing {sortedIdeas.length > 0 ? `${startIndex + 1}-${Math.min(startIndex + itemsPerPage, sortedIdeas.length)} of ${sortedIdeas.length}` : '0'} projects
+            </p>
+          </div>
+
+          <label className="flex items-center gap-3 text-sm text-theme-muted">
+            <span className="font-medium text-slate-700">Sort by</span>
+            <select
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value)}
+              className="rounded-2xl border border-(--surface-border) bg-white px-4 py-2.5 text-sm text-slate-800 outline-none transition focus:border-cyan-400/60"
+            >
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="title-asc">Title A-Z</option>
+              <option value="title-desc">Title Z-A</option>
+            </select>
+          </label>
+        </div>
+
         {loading ? (
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, index) => (
-              <div key={index} className="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-[var(--surface-border)] bg-[var(--surface-bg)] shadow-sm">
+              <div key={index} className="flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-(--surface-border) bg-(--surface-bg) shadow-sm">
                 <div className="h-56 animate-pulse bg-slate-200" />
                 <div className="flex flex-1 flex-col p-5">
                   <div className="h-4 w-24 animate-pulse rounded-full bg-slate-200" />
@@ -213,7 +288,7 @@ export default function IdeaPage() {
             <p className="text-lg font-semibold">Unable to load projects</p>
             <p className="mt-2 text-sm text-rose-700">{error}</p>
           </div>
-        ) : ideas.length === 0 ? (
+        ) : sortedIdeas.length === 0 ? (
           <div className="theme-section p-8 text-center text-slate-700">
             <p className="text-2xl font-bold text-slate-900">No projects found</p>
             <p className="mt-3 text-sm text-slate-600">Try a different search term, category, or date range.</p>
@@ -224,11 +299,49 @@ export default function IdeaPage() {
             </div>
           </div>
         ) : (
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {ideas.map((idea) => (
-              <ProjectCard key={idea._id} idea={idea} onViewDetails={openIdeaDetails} />
-            ))}
-          </div>
+          <>
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+              {paginatedIdeas.map((idea) => (
+                <ProjectCard key={idea._id} idea={idea} onViewDetails={openIdeaDetails} />
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-(--surface-border) bg-(--surface-bg) p-4 shadow-sm">
+              <p className="text-sm text-theme-muted">
+                Page {currentPage} of {totalPages}
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  onPress={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+                  className="h-10 px-4"
+                  variant="bordered"
+                  isDisabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+
+                {visiblePageNumbers.map((page) => (
+                  <Button
+                    key={page}
+                    onPress={() => setCurrentPage(page)}
+                    className="h-10 min-w-10 px-3"
+                    variant={page === currentPage ? 'solid' : 'bordered'}
+                  >
+                    {page}
+                  </Button>
+                ))}
+
+                <Button
+                  onPress={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
+                  className="h-10 px-4"
+                  variant="bordered"
+                  isDisabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          </>
         )}
       </section>
     </div>
