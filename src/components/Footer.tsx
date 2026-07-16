@@ -45,7 +45,6 @@ const Footer: React.FC = () => {
               <li><Link href="/" className="transition hover:text-amber-300">Home</Link></li>
               <li><Link href="/about" className="transition hover:text-amber-300">About</Link></li>
               <li><Link href="/projects" className="transition hover:text-amber-300">Projects</Link></li>
-              <li><Link href="/help" className="transition hover:text-amber-300">Help</Link></li>
               <li><Link href="/contact" className="transition hover:text-amber-300">Contact</Link></li>
             </ul>
           </div>

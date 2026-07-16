@@ -82,12 +82,6 @@ const Navbar: React.FC = () => {
               Contact
             </Link>
           </li>
-          <li>
-            <Link href="/help" className={navLinkClass(isActive("/help"))}>
-              Help
-            </Link>
-          </li>
-
           {isAuthenticated && (
             <>
               <li>
@@ -98,11 +92,6 @@ const Navbar: React.FC = () => {
               <li>
                 <Link href="/my-projects" className={navLinkClass(isActive("/my-projects"))}>
                   My Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/my-contributions" className={navLinkClass(isActive("/my-contributions"))}>
-                  My Contributions
                 </Link>
               </li>
             </>
@@ -145,13 +134,19 @@ const Navbar: React.FC = () => {
                   </div>
                 </div>
                 <Dropdown.Menu aria-label="User Actions">
-                  <DropdownItem id="profile" textValue="Profile" href="/profile">
+                  <DropdownItem key="profile" textValue="Profile" href="/profile">
                     <div className="flex w-full items-center justify-between gap-2">
                       <Label>Profile</Label>
                       <MdPerson className="size-3.5 text-muted" />
                     </div>
                   </DropdownItem>
-                  <DropdownItem id="logout" textValue="Logout" variant="danger" onClick={handleSignOut}>
+                  <DropdownItem key="my-contributions" textValue="My Contributions" href="/my-contributions">
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <Label>My Contributions</Label>
+                      <MdPerson className="size-3.5 text-muted" />
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem key="logout" textValue="Logout" variant="danger" onClick={handleSignOut}>
                     <div className="flex w-full items-center justify-between gap-2">
                       <Label>Logout</Label>
                       <MdLogout className="size-3.5 text-danger" />
@@ -229,11 +224,6 @@ const Navbar: React.FC = () => {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link href="/help" className={`flex rounded-xl px-3 py-3 ${navLinkClass(isActive("/help"))}`} onClick={() => setMobileMenuOpen(false)}>
-                  Help
-                </Link>
-              </li>
             </ul>
 
             <div className="mt-4 border-t border-[var(--surface-border)] pt-4">
@@ -244,9 +234,6 @@ const Navbar: React.FC = () => {
                   </Link>
                   <Link href="/my-projects" className={`flex rounded-xl px-3 py-3 ${navLinkClass(isActive("/my-projects"))}`} onClick={() => setMobileMenuOpen(false)}>
                     My Projects
-                  </Link>
-                  <Link href="/my-contributions" className={`flex rounded-xl px-3 py-3 ${navLinkClass(isActive("/my-contributions"))}`} onClick={() => setMobileMenuOpen(false)}>
-                    My Contributions
                   </Link>
                 </div>
               ) : (
