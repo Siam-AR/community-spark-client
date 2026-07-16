@@ -314,7 +314,7 @@ export default function IdeaPage() {
                 <Button
                   onPress={() => setCurrentPage((page) => Math.max(page - 1, 1))}
                   className="h-10 px-4"
-                  variant="bordered"
+                  variant="outline"
                   isDisabled={currentPage === 1}
                 >
                   Previous
@@ -334,7 +334,7 @@ export default function IdeaPage() {
                 <Button
                   onPress={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
                   className="h-10 px-4"
-                  variant="bordered"
+                  variant="outline"
                   isDisabled={currentPage === totalPages}
                 >
                   Next
