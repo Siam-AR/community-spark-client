@@ -325,7 +325,7 @@ function LoginPageContent() {
             <Button type="submit" className="theme-btn-primary w-full sm:w-1/2" isDisabled={isLoading}>
               {isLoading ? 'LOGGING IN...' : 'LOG IN'}
             </Button>
-            <Button type="button" variant="flat" className="w-full border-emerald-300 bg-emerald-50 text-emerald-700 sm:w-1/2" onPress={fillDemoCredentials} isDisabled={isLoading}>
+            <Button type="button" variant="outline" className="w-full border-emerald-300 bg-emerald-50 text-emerald-700 sm:w-1/2" onPress={fillDemoCredentials} isDisabled={isLoading}>
               Demo Login
             </Button>
           </div>
