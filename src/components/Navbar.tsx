@@ -71,6 +71,11 @@ const Navbar: React.FC = () => {
               Contact
             </Link>
           </li>
+          <li>
+            <Link href="/help" className={navLinkClass(isActive("/help"))}>
+              Help
+            </Link>
+          </li>
 
           {isAuthenticated && (
             <>
@@ -98,7 +103,7 @@ const Navbar: React.FC = () => {
             {isDarkMode ? (
               <MdDarkMode className="text-xl text-white" />
             ) : (
-              <MdLightMode className="text-xl text-[var(--brand-gold)]" />
+              <MdLightMode className="text-xl text-(--brand-gold)" />
             )}
           </button>
 
@@ -181,6 +186,11 @@ const Navbar: React.FC = () => {
           <li>
             <Link href="/contact" className="font-medium text-theme">
               Contact
+            </Link>
+          </li>
+          <li>
+            <Link href="/help" className="font-medium text-theme">
+              Help
             </Link>
           </li>
           {isAuthenticated && (
