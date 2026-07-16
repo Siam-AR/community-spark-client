@@ -325,7 +325,7 @@ export default function IdeaPage() {
                     key={page}
                     onPress={() => setCurrentPage(page)}
                     className="h-10 min-w-10 px-3"
-                    variant={page === currentPage ? 'solid' : 'bordered'}
+                    variant={page === currentPage ? 'primary' : 'outline'}
                   >
                     {page}
                   </Button>
