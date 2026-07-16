@@ -332,6 +332,39 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="max-w-7xl mx-auto rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-bg)] p-6 shadow-[var(--shadow-soft)] md:p-8">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--brand-emerald)]">Community momentum</p>
+              <h2 className="mt-2 text-2xl md:text-3xl font-bold text-theme">Live signals from the projects people are already supporting.</h2>
+            </div>
+            <p className="max-w-xl text-sm leading-7 text-theme-muted">
+              These highlights update from the latest featured projects and community conversations so the homepage feels active and current.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {impactStats.map((stat) => {
+              const Icon = stat.icon;
+
+              return (
+                <div key={stat.label} className="rounded-[1.25rem] border border-[var(--surface-border)] bg-[var(--surface-muted)] p-5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--brand-emerald)]/10 text-[var(--brand-emerald)]">
+                      <Icon className="text-lg" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-theme-muted">{stat.label}</p>
+                      <p className="text-2xl font-bold text-theme">{stat.value}</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-theme-muted">{stat.hint}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
         <section className="max-w-7xl mx-auto overflow-hidden rounded-[2rem] border border-white/20 bg-[linear-gradient(135deg,var(--brand-emerald),var(--brand-gold))] p-8 text-white shadow-[0_25px_70px_rgba(15,23,42,0.18)] md:p-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.22),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.16),transparent_30%)]" />
           <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
