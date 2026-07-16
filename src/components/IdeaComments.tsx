@@ -185,12 +185,12 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
 
   return (
     <section className="mt-8">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-900">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <FaRegCommentDots className="text-cyan-600" />
-            <h3 className="text-lg font-semibold text-slate-900">Discussion</h3>
-            <span className="text-sm text-slate-500">{comments.length ?? initialCount} comments</span>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Discussion</h3>
+            <span className="text-sm text-slate-500 dark:text-slate-400">{comments.length ?? initialCount} comments</span>
           </div>
         </div>
 
@@ -198,6 +198,7 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
           <div className="grid gap-3">
             <div className="flex gap-3">
               <Input
+                className="dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
                 placeholder={isAuthenticated ? "Write a comment..." : "Log in to write a comment"}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -210,18 +211,18 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
 
             <div className="mt-2 space-y-3">
               {loading ? (
-                <p className="text-sm text-slate-500">Loading comments...</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Loading comments...</p>
               ) : comments.length === 0 ? (
-                <p className="text-sm text-slate-500">No comments yet — be the first to share feedback.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">No comments yet — be the first to share feedback.</p>
               ) : (
                 comments.map((comment) => (
-                  <div key={comment._id} className="rounded-lg border border-slate-100 p-3">
+                  <div key={comment._id} className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/80">
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="text-sm font-semibold text-slate-800">
+                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                           {comment.userName || comment.user?.name || comment.userEmail || "Anonymous"}
                         </p>
-                        <p className="mt-1 text-sm text-slate-600">{formatCommentDate(comment.createdAt)}</p>
+                        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{formatCommentDate(comment.createdAt)}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {isOwnComment(comment, user) && (
@@ -240,7 +241,11 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
                     <div className="mt-3">
                       {editingId === comment._id ? (
                         <div className="space-y-2">
-                          <TextArea value={editingText} onChange={(e) => setEditingText(e.target.value)} className="w-full" />
+                          <TextArea
+                            value={editingText}
+                            onChange={(e) => setEditingText(e.target.value)}
+                            className="w-full dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400"
+                          />
                           <div className="flex gap-2 justify-end">
                             <Button variant="outline" onPress={cancelEdit}>
                               Cancel
@@ -255,7 +260,7 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
                           </div>
                         </div>
                       ) : (
-                        <p className="text-sm text-slate-700 whitespace-pre-wrap">{comment.text}</p>
+                        <p className="text-sm whitespace-pre-wrap text-slate-700 dark:text-slate-300">{comment.text}</p>
                       )}
                     </div>
                   </div>
@@ -269,28 +274,28 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
       <Modal isOpen={deleteOpen} onOpenChange={(open) => (open ? setDeleteOpen(true) : closeDeleteModal())}>
         <ModalBackdrop>
           <ModalContainer placement="center" size="md">
-            <ModalDialog className="overflow-hidden border border-slate-200 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.18)]">
-              <ModalCloseTrigger className="right-4 top-4 text-slate-500 transition hover:text-slate-900" />
-              <ModalHeader className="border-b border-slate-100 bg-linear-to-br from-rose-50 to-white px-6 py-6">
+            <ModalDialog className="overflow-hidden border border-slate-200 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-900">
+              <ModalCloseTrigger className="right-4 top-4 text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
+              <ModalHeader className="border-b border-slate-100 bg-linear-to-br from-rose-50 to-white px-6 py-6 dark:border-slate-700 dark:from-slate-800 dark:to-slate-900">
                 <div className="flex items-start gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-500/20">
                     <FaExclamationTriangle />
                   </div>
                   <div>
-                    <ModalHeading className="text-2xl font-black tracking-tight text-slate-900">Delete Comment</ModalHeading>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">This action cannot be undone.</p>
+                    <ModalHeading className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">Delete Comment</ModalHeading>
+                    <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-400">This action cannot be undone.</p>
                   </div>
                 </div>
               </ModalHeader>
 
               <ModalBody className="px-6 py-5">
-                <p className="mt-4 whitespace-pre-wrap rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm leading-6 text-slate-700">
+                <p className="mt-4 whitespace-pre-wrap rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm leading-6 text-slate-700 dark:border-rose-900/40 dark:bg-rose-950/30 dark:text-slate-300">
                   {deleteTarget?.text || ""}
                 </p>
               </ModalBody>
 
-              <ModalFooter className="border-t border-slate-100 bg-slate-50 px-6 py-4">
-                <Button variant="outline" onPress={closeDeleteModal} isDisabled={submitting} className="border-slate-300 text-slate-700">
+              <ModalFooter className="border-t border-slate-100 bg-slate-50 px-6 py-4 dark:border-slate-700 dark:bg-slate-800">
+                <Button variant="outline" onPress={closeDeleteModal} isDisabled={submitting} className="border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-200">
                   Cancel
                 </Button>
                 <Button variant="danger" onPress={deleteComment} isDisabled={submitting} className="bg-rose-600 text-white shadow-lg shadow-rose-500/20">

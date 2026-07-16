@@ -44,6 +44,7 @@ export interface Idea {
   category?: string;
   tags?: string[] | string;
   imageURL?: string;
+  images?: string[];
   location?: string;
   supportNeeded?: string;
   priority?: string;

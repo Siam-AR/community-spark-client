@@ -21,6 +21,10 @@ const fallbackProjects: Idea[] = [
     category: 'Environment',
     tags: ['gardening', 'food', 'community'],
     imageURL: 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80',
+    ],
     location: 'Dhaka North',
     supportNeeded: 'Volunteers and basic gardening tools',
     priority: 'High',
@@ -44,6 +48,10 @@ const fallbackProjects: Idea[] = [
     category: 'Education',
     tags: ['education', 'technology', 'youth'],
     imageURL: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=900&q=80',
+    ],
     location: 'Uttara',
     supportNeeded: 'Mentors and laptops',
     priority: 'Medium',
@@ -67,6 +75,10 @@ const fallbackProjects: Idea[] = [
     category: 'Health',
     tags: ['health', 'wellness', 'outreach'],
     imageURL: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=900&q=80',
+    ],
     location: 'Banani',
     supportNeeded: 'Health volunteers and screening materials',
     priority: 'High',
@@ -190,19 +202,40 @@ export const authAPI = {
 };
 
 export const ideasAPI = {
-  getFeatured: () => apiCall<Idea[]>('/projects/featured'),
+  getFeatured: async () => {
+    try {
+      return await apiCall<Idea[]>('/projects/featured');
+    } catch {
+      return getFallbackProjects();
+    }
+  },
 
-  getAll: (filters: IdeaFilters = {}) => {
+  getAll: async (filters: IdeaFilters = {}) => {
     const params = new URLSearchParams();
     if (filters.category) params.append('category', filters.category);
     if (filters.search) params.append('search', filters.search);
     if (filters.dateFrom) params.append('dateFrom', filters.dateFrom);
     if (filters.dateTo) params.append('dateTo', filters.dateTo);
 
-    return apiCall<Idea[]>(`/projects?${params.toString()}`);
+    try {
+      return await apiCall<Idea[]>(`/projects?${params.toString()}`);
+    } catch {
+      return getFallbackProjects(filters);
+    }
   },
 
-  getById: (id: string) => apiCall<Idea>(`/projects/${id}`),
+  getById: async (id: string) => {
+    try {
+      return await apiCall<Idea>(`/projects/${id}`);
+    } catch {
+      const fallback = getFallbackProjects().find((project) => project._id === id || project.id === id);
+      if (fallback) {
+        return fallback;
+      }
+
+      throw new Error('Unable to load this project right now.');
+    }
+  },
 
   create: (data: Partial<Idea>) => apiCall<Idea>('/projects', {
     method: 'POST',

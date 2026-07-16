@@ -129,6 +129,14 @@ body {
   color: color-mix(in srgb, var(--page-text) 72%, transparent);
 }
 
+.text-brand-emerald {
+  color: var(--brand-emerald);
+}
+
+.text-brand-gold {
+  color: var(--brand-gold);
+}
+
 .border-theme {
   border-color: var(--surface-border);
 }
