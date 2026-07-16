@@ -53,25 +53,24 @@ const marqueeItems = [
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [featuredIdeas, setFeaturedIdeas] = useState<Idea[]>([]);
+  const [latestIdeas, setLatestIdeas] = useState<Idea[]>([]);
   const [ideasLoading, setIdeasLoading] = useState(true);
   const [ideasError, setIdeasError] = useState('');
 
-
   const impactStats = useMemo(() => {
-    const totalProjects = featuredIdeas.length;
+    const totalProjects = latestIdeas.length;
     const categories = new Set(
-      featuredIdeas
+      latestIdeas
         .map((idea) => idea.category)
         .filter((category): category is string => Boolean(category)),
     ).size;
-    const conversations = featuredIdeas.reduce((sum, idea) => sum + (idea.commentCount || 0), 0);
+    const conversations = latestIdeas.reduce((sum, idea) => sum + (idea.commentCount || 0), 0);
 
     return [
       {
-        label: 'Featured Projects',
+        label: 'Latest Projects',
         value: String(totalProjects),
-        hint: 'Live projects highlighted from the community feed',
+        hint: 'Newest projects added to the community feed',
         icon: FaHandsHelping,
       },
       {
@@ -87,19 +86,23 @@ export default function Home() {
         icon: FaChartLine,
       },
     ];
-  }, [featuredIdeas]);
+  }, [latestIdeas]);
 
   const chartData = useMemo(() => {
-    const grouped = featuredIdeas.reduce<Record<string, number>>((acc, idea) => {
+    const grouped = latestIdeas.reduce<Record<string, number>>((acc, idea) => {
       const key = idea.category || 'Community';
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
 
     return Object.entries(grouped).map(([name, count]) => ({ name, count }));
-  }, [featuredIdeas]);
+  }, [latestIdeas]);
 
-  const featuredProjectCards = featuredIdeas.slice(0, 3);
+  const latestProjectCards = useMemo(() => {
+    return [...latestIdeas]
+      .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+      .slice(0, 3);
+  }, [latestIdeas]);
 
   useEffect(() => {
     const preload = async () => {
@@ -122,19 +125,19 @@ export default function Home() {
   useEffect(() => {
     let mounted = true;
 
-    const loadFeaturedIdeas = async () => {
+    const loadLatestIdeas = async () => {
       try {
         setIdeasLoading(true);
-        const data = await ideasAPI.getFeatured();
+        const data = await ideasAPI.getAll();
 
         if (mounted) {
-          setFeaturedIdeas(Array.isArray(data) ? data : []);
+          setLatestIdeas(Array.isArray(data) ? data : []);
           setIdeasError('');
         }
       } catch (error) {
         if (mounted) {
-          setIdeasError(error instanceof Error ? error.message : 'Failed to load trending initiatives.');
-          setFeaturedIdeas([]);
+          setIdeasError(error instanceof Error ? error.message : 'Failed to load latest initiatives.');
+          setLatestIdeas([]);
         }
       } finally {
         if (mounted) {
@@ -143,7 +146,7 @@ export default function Home() {
       }
     };
 
-    loadFeaturedIdeas();
+    loadLatestIdeas();
 
     return () => {
       mounted = false;
@@ -212,8 +215,8 @@ export default function Home() {
       <section className="max-w-7xl mx-auto rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-bg)] p-6 shadow-[var(--shadow-soft)] md:p-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--brand-emerald)]">Featured Projects</p>
-              <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">Highlighted community initiatives with real momentum</h2>
+              <p className="text-sm font-semibold tracking-[0.25em] uppercase text-[var(--brand-emerald)]">Latest Projects</p>
+              <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">The newest community initiatives gaining momentum</h2>
             </div>
             <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--brand-emerald)] hover:text-[var(--brand-gold)]">
               Browse all projects
@@ -222,7 +225,7 @@ export default function Home() {
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {(featuredProjectCards.length > 0 ? featuredProjectCards : Array.from({ length: 3 }, () => null)).map((idea, index) => {
+            {(latestProjectCards.length > 0 ? latestProjectCards : Array.from({ length: 3 }, () => null)).map((idea, index) => {
               if (!idea) {
                 return (
                   <div key={index} className="theme-card-soft overflow-hidden p-5">
