@@ -5,7 +5,7 @@ import ProjectCard from '@/components/ProjectCard';
 import { ideasAPI } from '@/lib/api';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import { FaFilter, FaSearch } from 'react-icons/fa';
 import type { Idea } from '@/types';
 
@@ -34,10 +34,6 @@ export default function IdeaPage() {
 
     return () => window.clearTimeout(timer);
   }, [searchValue]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearch, category, dateFrom, dateTo, sortBy]);
 
   useEffect(() => {
     let active = true;
@@ -87,7 +83,33 @@ export default function IdeaPage() {
     };
   }, [debouncedSearch, category, dateFrom, dateTo]);
 
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCurrentPage(1);
+    setSearchValue(event.target.value);
+  };
+
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setCurrentPage(1);
+    setCategory(event.target.value);
+  };
+
+  const handleDateFromChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCurrentPage(1);
+    setDateFrom(event.target.value);
+  };
+
+  const handleDateToChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCurrentPage(1);
+    setDateTo(event.target.value);
+  };
+
+  const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setCurrentPage(1);
+    setSortBy(event.target.value);
+  };
+
   const resetFilters = () => {
+    setCurrentPage(1);
     setSearchValue('');
     setDebouncedSearch('');
     setCategory('All Categories');
@@ -186,7 +208,7 @@ export default function IdeaPage() {
                   <FaSearch className="shrink-0 text-slate-400" />
                   <input
                     value={searchValue}
-                    onChange={(event) => setSearchValue(event.target.value)}
+                    onChange={handleSearchChange}
                     type="search"
                     placeholder="Search community projects..."
                     className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
@@ -199,7 +221,7 @@ export default function IdeaPage() {
                   <span className="mb-2 block text-sm font-medium text-slate-700">Category</span>
                   <select
                     value={category}
-                    onChange={(event) => setCategory(event.target.value)}
+                    onChange={handleCategoryChange}
                     className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-cyan-400/60"
                   >
                     {CATEGORY_OPTIONS.map((option) => (
@@ -214,7 +236,7 @@ export default function IdeaPage() {
                   <span className="mb-2 block text-sm font-medium text-slate-700">Date from</span>
                   <input
                     value={dateFrom}
-                    onChange={(event) => setDateFrom(event.target.value)}
+                    onChange={handleDateFromChange}
                     type="date"
                     className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-cyan-400/60"
                   />
@@ -226,7 +248,7 @@ export default function IdeaPage() {
                   <span className="mb-2 block text-sm font-medium text-slate-700">Date to</span>
                   <input
                     value={dateTo}
-                    onChange={(event) => setDateTo(event.target.value)}
+                    onChange={handleDateToChange}
                     type="date"
                     className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-cyan-400/60"
                   />
@@ -256,7 +278,7 @@ export default function IdeaPage() {
             <span className="font-medium text-slate-700">Sort by</span>
             <select
               value={sortBy}
-              onChange={(event) => setSortBy(event.target.value)}
+              onChange={handleSortChange}
               className="rounded-2xl border border-(--surface-border) bg-white px-4 py-2.5 text-sm text-slate-800 outline-none transition focus:border-cyan-400/60"
             >
               <option value="newest">Newest first</option>
